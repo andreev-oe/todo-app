@@ -1,17 +1,19 @@
 import React from 'react';
 
-const Task = () => {
+const Task = ({props}) => {
+    const {className, description, created, editing} = props
     return (
-        <li className="completed">
+        <li className={className}>
             <div className="view">
                 <input className="toggle" type="checkbox" />
                     <label>
-                        <span className="description">Completed task</span>
-                        <span className="created">created 17 seconds ago</span>
+                        <span className="description">{description}</span>
+                        <span className="created">{created}</span>
                     </label>
                     <button className="icon icon-edit"></button>
                     <button className="icon icon-destroy"></button>
             </div>
+            {editing ? <input type="text" className="edit" defaultValue={description}/> : null}
         </li>
     )
 }

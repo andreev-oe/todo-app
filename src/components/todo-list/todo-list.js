@@ -1,10 +1,13 @@
 import React from 'react';
 import Task from '../task/task.js';
 
-const TodoList = () => {
+const TodoList = ({tasks}) => {
     return (
         <ul className="todo-list">
-            <Task />
+            {tasks.map((task) => {
+                const {id, ...data} = task
+                return <Task key={id} props={data}/>
+            })}
         </ul>
     )
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 
-const TaskFilter = () => {
+const TaskFilter = ({props}) => {
+    const {id, className, buttonText} = props
     return (
-        <li>
-            <button className="selected">All</button>
+        <li key={id}>
+            <button className={className}>{buttonText}</button>
         </li>
     )
 }
