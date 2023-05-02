@@ -2,13 +2,11 @@ import React from 'react';
 import TodoList from '../todo-list/todo-list.js';
 import Footer from '../footer/footer.js';
 
-const Main = ({tasks, filterButtons}) => {
-    console.log(tasks)
-    console.log(filterButtons)
+const Main = ({onDelete, onToggle, tasks, filterButtons}) => {
     return (
         <section className="main">
-            <TodoList tasks={tasks}/>
-            <Footer filterButtons={filterButtons}/>
+            <TodoList tasks={tasks} onToggle={onToggle} onDelete={onDelete}/>
+            <Footer filterButtons={filterButtons} />
         </section>
     )
 }
