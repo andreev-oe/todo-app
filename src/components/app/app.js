@@ -46,7 +46,8 @@ export default class App extends React.Component {
                 created: formatDistanceToNow(new Date(2023, 4, 1, 19)),
                 editing: false
             }
-        ]
+        ],
+        inputValue: ''
     }
     deleteItem = (evt) => {
         const deleteButtonElement = evt.target
@@ -92,11 +93,23 @@ export default class App extends React.Component {
             }
         })
     }
+    onInputChange = (evt) => {
+        this.setState({
+            inputValue: evt.target.value
+        })
+    }
+    onSubmit = (evt) => {
+        evt.preventDefault()
+        this.addItem(this.state.inputValue)
+        this.setState({
+            inputValue: ''
+        })
+    }
     render() {
         const {tasks} = this.state
         return (
             <section className="todoapp">
-                <Header />
+                <Header onInputChange={this.onInputChange} onSubmit={this.onSubmit} inputValue={this.state.inputValue} />
                 <Main filterButtons={filterButtons} tasks={tasks} onToggle={this.onToggle} onDelete={this.deleteItem}/>
             </section>
         )
