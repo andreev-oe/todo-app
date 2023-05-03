@@ -167,10 +167,11 @@ export default class App extends React.Component {
     }
     render() {
         const {tasks, filteredTasks} = this.state
+        const countActiveTasks = tasks.filter((task) => task.className !== 'completed').length
         return (
             <section className="todoapp">
                 <Header onInputChange={this.onInputChange} onSubmit={this.onSubmit} inputValue={this.state.inputValue} />
-                <Main filterButtons={this.state.filterButtons} tasks={filteredTasks || tasks} onToggle={this.onToggle} onDelete={this.deleteItem} onFilterButtonClick={this.onFilterButtonClick}/>
+                <Main filterButtons={this.state.filterButtons} countActiveTasks={countActiveTasks} tasks={filteredTasks || tasks} onToggle={this.onToggle} onDelete={this.deleteItem} onFilterButtonClick={this.onFilterButtonClick}/>
             </section>
         )
     }
