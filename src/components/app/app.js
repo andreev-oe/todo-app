@@ -151,7 +151,7 @@ export default class App extends React.Component {
                 break
             case filterButtonsNames.completed:
                 this.setState(({tasks}) => {
-                    const filteredTasks = tasks.filter((task) => task.className === 'completed')
+                    const filteredTasks = tasks.filter((task) => task.className === completedTaskCssClass)
                     return {
                         filteredTasks: [...filteredTasks]
                     }
@@ -165,13 +165,33 @@ export default class App extends React.Component {
                 })
         }
     }
+    deleteAllCompletedTasks = () => {
+        this.setState(({tasks}) => {
+            const newTasks = tasks.filter((task) => task.className !== completedTaskCssClass)
+            return {
+                tasks: newTasks,
+                filteredTasks: this.tasks
+            }
+        })
+        this.changeFilterButtonClass(filterButtonsNames.all)
+    }
     render() {
         const {tasks, filteredTasks} = this.state
-        const countActiveTasks = tasks.filter((task) => task.className !== 'completed').length
+        const countActiveTasks = tasks.filter((task) => task.className !== completedTaskCssClass).length
         return (
             <section className="todoapp">
-                <Header onInputChange={this.onInputChange} onSubmit={this.onSubmit} inputValue={this.state.inputValue} />
-                <Main filterButtons={this.state.filterButtons} countActiveTasks={countActiveTasks} tasks={filteredTasks || tasks} onToggle={this.onToggle} onDelete={this.deleteItem} onFilterButtonClick={this.onFilterButtonClick}/>
+                <Header
+                    onInputChange={this.onInputChange}
+                    onSubmit={this.onSubmit}
+                    inputValue={this.state.inputValue} />
+                <Main
+                    filterButtons={this.state.filterButtons}
+                    countActiveTasks={countActiveTasks}
+                    tasks={filteredTasks || tasks}
+                    onToggle={this.onToggle}
+                    onDelete={this.deleteItem}
+                    onFilterButtonClick={this.onFilterButtonClick}
+                    deleteAllCompletedTasks={this.deleteAllCompletedTasks} />
             </section>
         )
     }
