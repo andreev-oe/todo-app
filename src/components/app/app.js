@@ -3,23 +3,11 @@ import Header from '../header/header.js';
 import Main from '../main/main.js';
 import {formatDistanceToNow} from 'date-fns';
 const completedTaskCssClass = 'completed'
-const filterButtons = [
-    {
-        id: 1,
-        className: 'selected',
-        buttonText: 'All'
-    },
-    {
-        id: 2,
-        className: '',
-        buttonText: 'Active'
-    },
-    {
-        id: 3,
-        className: '',
-        buttonText: 'Completed'
-    },
-]
+const filterButtonsNames = {
+    all: 'All',
+    active: 'Active',
+    completed: 'Completed'
+}
 
 export default class App extends React.Component {
     userMaxId = 1000
@@ -47,6 +35,24 @@ export default class App extends React.Component {
                 editing: false
             }
         ],
+        filteredTasks: null,
+        filterButtons: [
+            {
+                id: 1,
+                className: 'selected',
+                buttonText: 'All'
+            },
+            {
+                id: 2,
+                className: '',
+                buttonText: 'Active'
+            },
+            {
+                id: 3,
+                className: '',
+                buttonText: 'Completed'
+            },
+        ],
         inputValue: ''
     }
     deleteItem = (evt) => {
@@ -73,9 +79,9 @@ export default class App extends React.Component {
         this.setState(({tasks}) => {
             const newTasks = [...tasks, newTask]
             return {
-                tasks: newTasks
+                tasks: newTasks,
+                filteredTasks: this.tasks
             }
-
         })
     }
     onToggle = (evt) => {
@@ -101,16 +107,70 @@ export default class App extends React.Component {
     onSubmit = (evt) => {
         evt.preventDefault()
         this.addItem(this.state.inputValue)
-        this.setState({
-            inputValue: ''
+        this.setState(() => {
+            return {
+                inputValue: ''
+            }
+        })
+        this.changeFilterButtonClass(filterButtonsNames.all)
+    }
+    changeFilterButtonClass = (target) => {
+        const asd = target
+        this.setState(({filterButtons}) => {
+            const newFilteredButtons = filterButtons.map((button) => {
+                if (asd === button.buttonText) {
+                    button.className = 'selected'
+                    return button
+                }
+                button.className = ''
+                return button
+            })
+            return {
+                filterButtons: newFilteredButtons
+            }
         })
     }
+    onFilterButtonClick = (evt) => {
+        const targetButtonName = evt.target.dataset.buttonName
+        this.changeFilterButtonClass(targetButtonName)
+        switch (evt.target.dataset.buttonName) {
+            case filterButtonsNames.all:
+                this.setState(({tasks}) => {
+                    return {
+                        filteredTasks: [...tasks]
+                    }
+                })
+                break
+            case filterButtonsNames.active:
+                this.setState(({tasks}) => {
+                    const filteredTasks = tasks.filter((task) => !task.className || task.className === 'editing')
+                    return {
+                        filteredTasks: [...filteredTasks]
+                    }
+                })
+                break
+            case filterButtonsNames.completed:
+                this.setState(({tasks}) => {
+                    const filteredTasks = tasks.filter((task) => task.className === 'completed')
+                    return {
+                        filteredTasks: [...filteredTasks]
+                    }
+                })
+                break
+            default:
+                this.setState(({tasks}) => {
+                    return {
+                        filteredTasks: [...tasks]
+                    }
+                })
+        }
+    }
     render() {
-        const {tasks} = this.state
+        const {tasks, filteredTasks} = this.state
         return (
             <section className="todoapp">
                 <Header onInputChange={this.onInputChange} onSubmit={this.onSubmit} inputValue={this.state.inputValue} />
-                <Main filterButtons={filterButtons} tasks={tasks} onToggle={this.onToggle} onDelete={this.deleteItem}/>
+                <Main filterButtons={this.state.filterButtons} tasks={filteredTasks || tasks} onToggle={this.onToggle} onDelete={this.deleteItem} onFilterButtonClick={this.onFilterButtonClick}/>
             </section>
         )
     }

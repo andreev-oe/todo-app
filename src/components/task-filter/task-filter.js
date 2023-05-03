@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TaskFilter = ({props}) => {
+const TaskFilter = ({props, onFilterButtonClick}) => {
     const {id, className, buttonText} = props
     return (
         <li key={id}>
-            <button className={className}>{buttonText}</button>
+            <button className={className} data-button-name={buttonText} onClick={onFilterButtonClick}>{buttonText}</button>
         </li>
     )
 }
