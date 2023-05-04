@@ -26,4 +26,9 @@ const Task = ({onDelete, onToggle, props}) => {
     )
 }
 
+Task.defaultProps = {
+    onDelete: () => {},
+    onToggle: () => {},
+}
+
 export default Task

@@ -16,4 +16,8 @@ const TodoList = ({onDelete, onToggle, tasks}) => {
     )
 }
 
+TodoList.defaultProps = {
+    tasks: []
+}
+
 export default TodoList

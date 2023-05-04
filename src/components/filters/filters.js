@@ -6,10 +6,18 @@ const Filters = ({filterButtons, onFilterButtonClick}) => {
         <ul className="filters">
             {filterButtons.map((button) => {
                 const {id, ...data} = button
-                return <TaskFilter key={id} props={data} onFilterButtonClick={onFilterButtonClick} />
+                return <TaskFilter
+                    key={id}
+                    props={data}
+                    onFilterButtonClick={onFilterButtonClick} />
             })}
         </ul>
     )
+}
+
+Filters.defaultProps = {
+    onFilterButtonClick: () => {},
+    filterButtons: []
 }
 
 export default Filters

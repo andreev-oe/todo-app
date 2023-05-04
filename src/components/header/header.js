@@ -5,7 +5,10 @@ const Header = ({onInputChange, onSubmit, inputValue}) => {
     return (
         <header className="header">
             <h1>Todos</h1>
-            <NewTaskForm onInputChange={onInputChange} onSubmit={onSubmit} inputValue={inputValue}/>
+            <NewTaskForm
+                onInputChange={onInputChange}
+                onSubmit={onSubmit}
+                inputValue={inputValue} />
         </header>
     )
 }

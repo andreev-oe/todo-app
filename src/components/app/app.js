@@ -115,10 +115,9 @@ export default class App extends React.Component {
         this.changeFilterButtonClass(filterButtonsNames.all)
     }
     changeFilterButtonClass = (target) => {
-        const asd = target
         this.setState(({filterButtons}) => {
             const newFilteredButtons = filterButtons.map((button) => {
-                if (asd === button.buttonText) {
+                if (target === button.buttonText) {
                     button.className = 'selected'
                     return button
                 }
