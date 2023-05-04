@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const TaskFilter = ({props, onFilterButtonClick}) => {
     const {id, className, buttonText} = props
@@ -19,13 +20,7 @@ TaskFilter.defaultProps = {
     props: {}
 }
 TaskFilter.propTypes = {
-    onFilterButtonClick: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
+    onFilterButtonClick: PropTypes.func,
     props: (props, propName, componentName) => {
         const value = props[propName]
         if (typeof value === 'object' && Object.keys(value).length > 0) {

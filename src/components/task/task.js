@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Task = ({onDelete, onToggle, props}) => {
     const {id, className, description, created, editing} = props
@@ -13,12 +14,8 @@ const Task = ({onDelete, onToggle, props}) => {
                     onChange={onToggle}
                     checked={className} />
                     <label>
-                        <span className="description">
-                            {description}
-                        </span>
-                        <span className="created">
-                            {created}
-                        </span>
+                        <span className="description">{description}</span>
+                        <span className="created">{created}</span>
                     </label>
                     <button className="icon icon-edit"></button>
                     <button
@@ -37,20 +34,8 @@ Task.defaultProps = {
     props: {}
 }
 Task.propTypes = {
-    onDelete: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
-    onToggle: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
+    onDelete: PropTypes.func,
+    onToggle: PropTypes.func,
     props: (props, propName, componentName) => {
         const value = props[propName]
         if (typeof value === 'object' && Object.keys(value).length > 0) {

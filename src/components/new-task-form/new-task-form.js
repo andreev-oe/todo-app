@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const NewTaskForm = ({onInputChange, onSubmit, inputValue}) => {
     return (
@@ -20,27 +21,9 @@ NewTaskForm.defaultProps = {
     onSubmit: () => {},
 }
 NewTaskForm.propTypes = {
-    onInputChange: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
-    onSubmit: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
-    inputValue: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'string') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a String`)
-    },
+    onInputChange: PropTypes.func,
+    onSubmit: PropTypes.func,
+    inputValue: PropTypes.string
 }
 
 export default NewTaskForm

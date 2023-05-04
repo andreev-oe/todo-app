@@ -1,5 +1,6 @@
 import React from 'react';
 import TaskFilter from '../task-filter/task-filter.js';
+import PropTypes from 'prop-types';
 
 const Filters = ({filterButtons, onFilterButtonClick}) => {
     return (
@@ -20,20 +21,8 @@ Filters.defaultProps = {
     filterButtons: []
 }
 Filters.propTypes = {
-    onFilterButtonClick: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
-    filterButtons: (props, propName, componentName) => {
-        const value = props[propName]
-        if (Array.isArray(value)) {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be an Array of Objects`)
-    },
+    onFilterButtonClick: PropTypes.func,
+    filterButtons: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default Filters

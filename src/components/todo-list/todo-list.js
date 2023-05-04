@@ -1,5 +1,6 @@
 import React from 'react';
 import Task from '../task/task.js';
+import PropTypes from 'prop-types';
 
 const TodoList = ({onDelete, onToggle, tasks}) => {
     return (
@@ -20,13 +21,7 @@ TodoList.defaultProps = {
     tasks: []
 }
 TodoList.propTypes = {
-    tasks: (props, propName, componentName) => {
-        const value = props[propName]
-        if (Array.isArray(value)) {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be an Array of Objects`)
-    }
+    tasks: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default TodoList

@@ -1,5 +1,6 @@
 import React from 'react';
 import Filters from '../filters/filters.js';
+import PropTypes from 'prop-types';
 
 const Footer = ({countActiveTasks, deleteAllCompletedTasks, filterButtons, onFilterButtonClick}) => {
     return (
@@ -24,20 +25,8 @@ Footer.defaultProps = {
     countActiveTasks: 0
 }
 Footer.propTypes = {
-    deleteAllCompletedTasks: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'function') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Function`)
-    },
-    countActiveTasks: (props, propName, componentName) => {
-        const value = props[propName]
-        if (typeof value === 'number') {
-            return null
-        }
-        return new TypeError(`${componentName}: ${propName} must be a Number`)
-    },
+    deleteAllCompletedTasks: PropTypes.func,
+    countActiveTasks: PropTypes.number
 }
 
 export default Footer
