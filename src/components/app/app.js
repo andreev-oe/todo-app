@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from '../header/header.js';
 import Main from '../main/main.js';
-import {formatDistanceToNow} from 'date-fns';
 const completedTaskCssClass = 'completed'
 const filterButtonsNames = {
     all: 'All',
@@ -19,21 +18,21 @@ export default class App extends React.Component {
                     id: this.userMaxId++,
                     className: 'completed',
                     description: 'Completed task',
-                    created: this.setDate(new Date(2023, 3, 28, 12)),
+                    created: new Date(2023, 3, 28, 12),
                     editing: false
                 },
                 {
                     id: this.userMaxId++,
                     className: 'editing',
                     description: 'Editing task',
-                    created: this.setDate(new Date(2023, 3, 30, 9)),
+                    created: new Date(2023, 3, 30, 9),
                     editing: true
                 },
                 {
                     id: this.userMaxId++,
                     className: '',
                     description: 'Active task',
-                    created: this.setDate(new Date(2023, 4, 1, 19)),
+                    created: new Date(2023, 4, 1, 19),
                     editing: false
                 }
             ],
@@ -58,9 +57,6 @@ export default class App extends React.Component {
             inputValue: ''
         }
     }
-    setDate = (date) => {
-        return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
-    }
     deleteItem = (evt) => {
         const deleteButtonElement = evt.target
         this.setState(({tasks}) => {
@@ -79,7 +75,7 @@ export default class App extends React.Component {
             id: this.userMaxId++,
             className: '',
             description: text,
-            created: this.setDate(new Date()),
+            created: new Date(),
             editing: false
         }
         this.setState(({tasks}) => {
@@ -190,8 +186,6 @@ export default class App extends React.Component {
                 editing: true,
             }
             const updatedTask = tasks[taskIndex]
-            console.log(updatedTask)
-            console.log(this.state.tasks)
             const newTasks = [
                 ...tasks.slice(0, taskIndex),
                 updatedTask,
@@ -206,7 +200,6 @@ export default class App extends React.Component {
     onEditFieldEnterKeyDown = (evt) => {
         if (evt.key === 'Enter') {
             const editField = evt.target
-            console.log(editField.value)
             this.setState(({tasks}) => {
                 const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
                 tasks[taskIndex] = {
@@ -216,8 +209,6 @@ export default class App extends React.Component {
                     description: editField.value
                 }
                 const updatedTask = tasks[taskIndex]
-                console.log(updatedTask)
-                console.log(this.state.tasks)
                 const newTasks = [
                     ...tasks.slice(0, taskIndex),
                     updatedTask,

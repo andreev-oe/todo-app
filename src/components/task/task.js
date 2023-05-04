@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {formatDistanceToNow} from 'date-fns';
 
 const Task = ({onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props}) => {
+    const setDate = (date) => {
+        return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
+    }
     const {id, className, description, created, editing} = props
     return (
         <li
@@ -15,7 +19,7 @@ const Task = ({onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCom
                     checked={className}/>
                     <label>
                         <span className="description">{description}</span>
-                        <span className="created">{created}</span>
+                        <span className="created">{setDate(created)}</span>
                     </label>
                     <button
                         className="icon icon-edit"
