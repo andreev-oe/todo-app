@@ -11,27 +11,30 @@ const filterButtonsNames = {
 
 export default class App extends React.Component {
     userMaxId = 1000
+    setDate = (date) => {
+        return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
+    }
     state = {
         tasks: [
             {
                 id: 1,
                 className: 'completed',
                 description: 'Completed task',
-                created: formatDistanceToNow(new Date(2023, 3, 28, 12)),
+                created: this.setDate(new Date(2023, 3, 28, 12)),
                 editing: false
             },
             {
                 id: 2,
                 className: 'editing',
                 description: 'Editing task',
-                created: formatDistanceToNow(new Date(2023, 3, 30, 9)),
+                created: this.setDate(new Date(2023, 3, 30, 9)),
                 editing: true
             },
             {
                 id: 3,
                 className: '',
                 description: 'Active task',
-                created: formatDistanceToNow(new Date(2023, 4, 1, 19)),
+                created: this.setDate(new Date(2023, 4, 1, 19)),
                 editing: false
             }
         ],
@@ -73,7 +76,7 @@ export default class App extends React.Component {
             id: this.userMaxId++,
             className: '',
             description: text,
-            created: formatDistanceToNow(new Date(2023, 4, 1, 19)),
+            created: this.setDate(new Date()),
             editing: false
         }
         this.setState(({tasks}) => {
