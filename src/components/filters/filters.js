@@ -19,5 +19,21 @@ Filters.defaultProps = {
     onFilterButtonClick: () => {},
     filterButtons: []
 }
+Filters.propTypes = {
+    onFilterButtonClick: (props, propName, componentName) => {
+        const value = props[propName]
+        if (typeof value === 'function') {
+            return null
+        }
+        return new TypeError(`${componentName}: ${propName} must be a Function`)
+    },
+    filterButtons: (props, propName, componentName) => {
+        const value = props[propName]
+        if (Array.isArray(value)) {
+            return null
+        }
+        return new TypeError(`${componentName}: ${propName} must be an Array of Objects`)
+    },
+}
 
 export default Filters

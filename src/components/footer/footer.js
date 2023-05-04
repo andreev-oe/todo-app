@@ -23,5 +23,21 @@ Footer.defaultProps = {
     deleteAllCompletedTasks: () => {},
     countActiveTasks: 0
 }
+Footer.propTypes = {
+    deleteAllCompletedTasks: (props, propName, componentName) => {
+        const value = props[propName]
+        if (typeof value === 'function') {
+            return null
+        }
+        return new TypeError(`${componentName}: ${propName} must be a Function`)
+    },
+    countActiveTasks: (props, propName, componentName) => {
+        const value = props[propName]
+        if (typeof value === 'number') {
+            return null
+        }
+        return new TypeError(`${componentName}: ${propName} must be a Number`)
+    },
+}
 
 export default Footer

@@ -15,9 +15,18 @@ const TodoList = ({onDelete, onToggle, tasks}) => {
         </ul>
     )
 }
-
+//TODO check work with empty tasks array
 TodoList.defaultProps = {
     tasks: []
+}
+TodoList.propTypes = {
+    tasks: (props, propName, componentName) => {
+        const value = props[propName]
+        if (Array.isArray(value)) {
+            return null
+        }
+        return new TypeError(`${componentName}: ${propName} must be an Array of Objects`)
+    }
 }
 
 export default TodoList
