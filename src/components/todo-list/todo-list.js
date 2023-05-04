@@ -2,7 +2,7 @@ import React from 'react';
 import Task from '../task/task.js';
 import PropTypes from 'prop-types';
 
-const TodoList = ({onDelete, onToggle, tasks}) => {
+const TodoList = ({onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks}) => {
     return (
         <ul className="todo-list">
             {tasks.map((task) => {
@@ -10,8 +10,10 @@ const TodoList = ({onDelete, onToggle, tasks}) => {
                 return <Task
                     key={id}
                     props={task}
-                    onToggle={onToggle}
-                    onDelete={onDelete}/>
+                    onToggleCompleted={onToggleCompleted}
+                    onDelete={onDelete}
+                    onEditButtonClick={onEditButtonClick}
+                    onEditFieldEnterKeyDown={onEditFieldEnterKeyDown} />
             })}
         </ul>
     )

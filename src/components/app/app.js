@@ -10,53 +10,56 @@ const filterButtonsNames = {
 }
 
 export default class App extends React.Component {
-    userMaxId = 1000
+    constructor(props) {
+        super(props);
+        this.userMaxId = 1000
+        this.state = {
+            tasks: [
+                {
+                    id: this.userMaxId++,
+                    className: 'completed',
+                    description: 'Completed task',
+                    created: this.setDate(new Date(2023, 3, 28, 12)),
+                    editing: false
+                },
+                {
+                    id: this.userMaxId++,
+                    className: 'editing',
+                    description: 'Editing task',
+                    created: this.setDate(new Date(2023, 3, 30, 9)),
+                    editing: true
+                },
+                {
+                    id: this.userMaxId++,
+                    className: '',
+                    description: 'Active task',
+                    created: this.setDate(new Date(2023, 4, 1, 19)),
+                    editing: false
+                }
+            ],
+            filteredTasks: null,
+            filterButtons: [
+                {
+                    id: 1,
+                    className: 'selected',
+                    buttonText: 'All'
+                },
+                {
+                    id: 2,
+                    className: '',
+                    buttonText: 'Active'
+                },
+                {
+                    id: 3,
+                    className: '',
+                    buttonText: 'Completed'
+                },
+            ],
+            inputValue: ''
+        }
+    }
     setDate = (date) => {
         return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
-    }
-    state = {
-        tasks: [
-            {
-                id: 1,
-                className: 'completed',
-                description: 'Completed task',
-                created: this.setDate(new Date(2023, 3, 28, 12)),
-                editing: false
-            },
-            {
-                id: 2,
-                className: 'editing',
-                description: 'Editing task',
-                created: this.setDate(new Date(2023, 3, 30, 9)),
-                editing: true
-            },
-            {
-                id: 3,
-                className: '',
-                description: 'Active task',
-                created: this.setDate(new Date(2023, 4, 1, 19)),
-                editing: false
-            }
-        ],
-        filteredTasks: null,
-        filterButtons: [
-            {
-                id: 1,
-                className: 'selected',
-                buttonText: 'All'
-            },
-            {
-                id: 2,
-                className: '',
-                buttonText: 'Active'
-            },
-            {
-                id: 3,
-                className: '',
-                buttonText: 'Completed'
-            },
-        ],
-        inputValue: ''
     }
     deleteItem = (evt) => {
         const deleteButtonElement = evt.target
@@ -87,7 +90,7 @@ export default class App extends React.Component {
             }
         })
     }
-    onToggle = (evt) => {
+    onToggleCompleted = (evt) => {
         const taskInputElement = evt.target
         let newClassName = ''
         if (taskInputElement.checked) {
@@ -177,6 +180,56 @@ export default class App extends React.Component {
         })
         this.changeFilterButtonClass(filterButtonsNames.all)
     }
+    onEditButtonClick = (evt) => {
+        const editButtonElement = evt.target
+        this.setState(({tasks}) => {
+            const taskIndex = tasks.findIndex((task) => task.id === Number(editButtonElement.closest('li').dataset.id))
+            tasks[taskIndex] = {
+                ...tasks[taskIndex],
+                className: 'editing',
+                editing: true,
+            }
+            const updatedTask = tasks[taskIndex]
+            console.log(updatedTask)
+            console.log(this.state.tasks)
+            const newTasks = [
+                ...tasks.slice(0, taskIndex),
+                updatedTask,
+                ...tasks.slice(taskIndex + 1)
+            ]
+            return {
+                tasks: newTasks,
+                filteredTasks: this.tasks
+            }
+        })
+    }
+    onEditFieldEnterKeyDown = (evt) => {
+        if (evt.key === 'Enter') {
+            const editField = evt.target
+            console.log(editField.value)
+            this.setState(({tasks}) => {
+                const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
+                tasks[taskIndex] = {
+                    ...tasks[taskIndex],
+                    className: '',
+                    editing: false,
+                    description: editField.value
+                }
+                const updatedTask = tasks[taskIndex]
+                console.log(updatedTask)
+                console.log(this.state.tasks)
+                const newTasks = [
+                    ...tasks.slice(0, taskIndex),
+                    updatedTask,
+                    ...tasks.slice(taskIndex + 1)
+                ]
+                return {
+                    tasks: newTasks,
+                    filteredTasks: this.tasks
+                }
+            })
+        }
+    }
     render() {
         const {tasks, filteredTasks} = this.state
         const countActiveTasks = tasks.filter((task) => task.className !== completedTaskCssClass).length
@@ -190,10 +243,12 @@ export default class App extends React.Component {
                     filterButtons={this.state.filterButtons}
                     countActiveTasks={countActiveTasks}
                     tasks={filteredTasks || tasks}
-                    onToggle={this.onToggle}
+                    onToggleCompleted={this.onToggleCompleted}
                     onDelete={this.deleteItem}
                     onFilterButtonClick={this.onFilterButtonClick}
-                    deleteAllCompletedTasks={this.deleteAllCompletedTasks} />
+                    deleteAllCompletedTasks={this.deleteAllCompletedTasks}
+                    onEditButtonClick={this.onEditButtonClick}
+                    onEditFieldEnterKeyDown={this.onEditFieldEnterKeyDown}/>
             </section>
         )
     }

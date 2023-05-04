@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Task = ({onDelete, onToggle, props}) => {
+const Task = ({onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props}) => {
     const {id, className, description, created, editing} = props
     return (
         <li
@@ -11,31 +11,34 @@ const Task = ({onDelete, onToggle, props}) => {
                 <input
                     className="toggle"
                     type="checkbox"
-                    onChange={onToggle}
-                    checked={className} />
+                    onChange={onToggleCompleted}
+                    checked={className}/>
                     <label>
                         <span className="description">{description}</span>
                         <span className="created">{created}</span>
                     </label>
-                    <button className="icon icon-edit"></button>
+                    <button
+                        className="icon icon-edit"
+                        onClick={onEditButtonClick}>
+                    </button>
                     <button
                         className="icon icon-destroy"
                         onClick={onDelete}>
                     </button>
             </div>
-            {editing ? <input type="text" className="edit" defaultValue={description} /> : null}
+            {editing ? <input type="text" className="edit" defaultValue={description} onKeyDown={onEditFieldEnterKeyDown}/> : null}
         </li>
     )
 }
 
 Task.defaultProps = {
     onDelete: () => {},
-    onToggle: () => {},
+    onToggleCompleted: () => {},
     props: {}
 }
 Task.propTypes = {
     onDelete: PropTypes.func,
-    onToggle: PropTypes.func,
+    onToggleCompleted: PropTypes.func,
     props: (props, propName, componentName) => {
         const value = props[propName]
         if (typeof value === 'object' && Object.keys(value).length > 0) {
