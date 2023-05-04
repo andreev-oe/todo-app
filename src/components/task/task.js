@@ -30,7 +30,7 @@ const Task = ({onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCom
                         onClick={onDelete}>
                     </button>
             </div>
-            {editing ? <input type="text" className="edit" defaultValue={description} onKeyDown={onEditFieldEnterKeyDown}/> : null}
+            {editing ? <input type="text" className="edit" defaultValue={description} onKeyDown={onEditFieldEnterKeyDown} autoFocus={true} /> : null}
         </li>
     )
 }

@@ -17,21 +17,21 @@ export default class App extends React.Component {
                 {
                     id: this.userMaxId++,
                     className: 'completed',
-                    description: 'Completed task',
+                    description: 'First',
                     created: new Date(2023, 3, 28, 12),
                     editing: false
                 },
                 {
                     id: this.userMaxId++,
-                    className: 'editing',
-                    description: 'Editing task',
+                    className: '',
+                    description: 'Second',
                     created: new Date(2023, 3, 30, 9),
-                    editing: true
+                    editing: false
                 },
                 {
                     id: this.userMaxId++,
                     className: '',
-                    description: 'Active task',
+                    description: 'Third',
                     created: new Date(2023, 4, 1, 19),
                     editing: false
                 }
@@ -59,14 +59,23 @@ export default class App extends React.Component {
     }
     deleteItem = (evt) => {
         const deleteButtonElement = evt.target
-        this.setState(({tasks}) => {
+        let newFilteredTasks
+        this.setState(({tasks, filteredTasks}) => {
             const taskIndex = tasks.findIndex((task) => task.id === Number(deleteButtonElement.closest('li').dataset.id))
             const newTasks = [
                 ...tasks.slice(0, taskIndex),
                 ...tasks.slice(taskIndex + 1)
             ]
+            if (filteredTasks) {
+                const filteredTaskIndex = filteredTasks.findIndex((task) => task.id === Number(deleteButtonElement.closest('li').dataset.id))
+                newFilteredTasks = [
+                    ...filteredTasks.slice(0, filteredTaskIndex),
+                    ...filteredTasks.slice(filteredTaskIndex + 1)
+                ]
+            }
             return {
-                tasks: newTasks
+                tasks: newTasks,
+                filteredTasks: newFilteredTasks || this.tasks
             }
         })
     }
@@ -167,18 +176,21 @@ export default class App extends React.Component {
         }
     }
     deleteAllCompletedTasks = () => {
-        this.setState(({tasks}) => {
+        this.setState(({tasks, filteredTasks}) => {
             const newTasks = tasks.filter((task) => task.className !== completedTaskCssClass)
+            let newFilteredTasks
+            if (filteredTasks) {
+                newFilteredTasks = filteredTasks.filter((task) => task.className !== completedTaskCssClass)
+            }
             return {
                 tasks: newTasks,
-                filteredTasks: this.tasks
+                filteredTasks: newFilteredTasks || this.tasks
             }
         })
-        this.changeFilterButtonClass(filterButtonsNames.all)
     }
     onEditButtonClick = (evt) => {
         const editButtonElement = evt.target
-        this.setState(({tasks}) => {
+        this.setState(({tasks, filteredTasks}) => {
             const taskIndex = tasks.findIndex((task) => task.id === Number(editButtonElement.closest('li').dataset.id))
             tasks[taskIndex] = {
                 ...tasks[taskIndex],
@@ -191,6 +203,24 @@ export default class App extends React.Component {
                 updatedTask,
                 ...tasks.slice(taskIndex + 1)
             ]
+            if (filteredTasks) {
+                const filteredTaskIndex = filteredTasks.findIndex((task) => task.id === Number(editButtonElement.closest('li').dataset.id))
+                filteredTasks[filteredTaskIndex] = {
+                    ...filteredTasks[filteredTaskIndex],
+                    className: 'editing',
+                    editing: true,
+                }
+                const updatedFilteredTask = filteredTasks[filteredTaskIndex]
+                const newFilteredTasks = [
+                    ...filteredTasks.slice(0, filteredTaskIndex),
+                    updatedFilteredTask,
+                    ...filteredTasks.slice(filteredTaskIndex + 1)
+                ]
+                return {
+                    tasks: newTasks,
+                    filteredTasks: newFilteredTasks
+                }
+            }
             return {
                 tasks: newTasks,
                 filteredTasks: this.tasks
@@ -200,7 +230,7 @@ export default class App extends React.Component {
     onEditFieldEnterKeyDown = (evt) => {
         if (evt.key === 'Enter') {
             const editField = evt.target
-            this.setState(({tasks}) => {
+            this.setState(({tasks, filteredTasks}) => {
                 const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
                 tasks[taskIndex] = {
                     ...tasks[taskIndex],
@@ -214,10 +244,30 @@ export default class App extends React.Component {
                     updatedTask,
                     ...tasks.slice(taskIndex + 1)
                 ]
+                if (filteredTasks) {
+                    const filteredTaskIndex = filteredTasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
+                    filteredTasks[filteredTaskIndex] = {
+                        ...filteredTasks[filteredTaskIndex],
+                        className: '',
+                        editing: false,
+                        description: editField.value
+                    }
+                    const updatedFilteredTask = filteredTasks[filteredTaskIndex]
+                    const newFilteredTasks = [
+                        ...filteredTasks.slice(0, filteredTaskIndex),
+                        updatedFilteredTask,
+                        ...filteredTasks.slice(filteredTaskIndex + 1)
+                    ]
+                    return {
+                        tasks: newTasks,
+                        filteredTasks: newFilteredTasks
+                    }
+                }
                 return {
                     tasks: newTasks,
                     filteredTasks: this.tasks
                 }
+
             })
         }
     }
