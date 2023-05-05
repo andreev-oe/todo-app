@@ -22,7 +22,7 @@ const TodoList = ({ onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onTogg
     </ul>
   )
 }
-//TODO check work with empty tasks array
+
 TodoList.defaultProps = {
   tasks: [],
 }

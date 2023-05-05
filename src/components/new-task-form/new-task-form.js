@@ -14,10 +14,11 @@ const NewTaskForm = ({ onInputChange, onSubmit, inputValue }) => {
     </form>
   )
 }
-//TODO add defaultProps for inputValue
+
 NewTaskForm.defaultProps = {
   onInputChange: () => {},
   onSubmit: () => {},
+  inputValue: '',
 }
 NewTaskForm.propTypes = {
   onInputChange: PropTypes.func,
