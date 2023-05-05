@@ -1,6 +1,7 @@
 import React from 'react';
-import Header from '../header/header.js';
-import Main from '../main/main.js';
+import NewTaskForm from '../new-task-form/new-task-form.js';
+import TodoList from '../todo-list/todo-list.js';
+import Footer from '../footer/footer.js';
 const completedTaskCssClass = 'completed'
 const filterButtonsNames = {
     all: 'All',
@@ -276,20 +277,26 @@ export default class App extends React.Component {
         const countActiveTasks = tasks.filter((task) => task.className !== completedTaskCssClass).length
         return (
             <section className="todoapp">
-                <Header
-                    onInputChange={this.onInputChange}
-                    onSubmit={this.onSubmit}
-                    inputValue={this.state.inputValue} />
-                <Main
-                    filterButtons={this.state.filterButtons}
-                    countActiveTasks={countActiveTasks}
-                    tasks={filteredTasks || tasks}
-                    onToggleCompleted={this.onToggleCompleted}
-                    onDelete={this.deleteItem}
-                    onFilterButtonClick={this.onFilterButtonClick}
-                    deleteAllCompletedTasks={this.deleteAllCompletedTasks}
-                    onEditButtonClick={this.onEditButtonClick}
-                    onEditFieldEnterKeyDown={this.onEditFieldEnterKeyDown}/>
+                <header className="header">
+                    <h1>Todos</h1>
+                    <NewTaskForm
+                        onInputChange={this.onInputChange}
+                        onSubmit={this.onSubmit}
+                        inputValue={this.state.inputValue} />
+                </header>
+                <section className="main">
+                    <TodoList
+                        tasks={filteredTasks || tasks}
+                        onToggleCompleted={this.onToggleCompleted}
+                        onDelete={this.deleteItem}
+                        onEditButtonClick={this.onEditButtonClick}
+                        onEditFieldEnterKeyDown={this.onEditFieldEnterKeyDown} />
+                    <Footer
+                        countActiveTasks={countActiveTasks}
+                        filterButtons={this.state.filterButtons}
+                        onFilterButtonClick={this.onFilterButtonClick}
+                        deleteAllCompletedTasks={this.deleteAllCompletedTasks} />
+                </section>
             </section>
         )
     }
