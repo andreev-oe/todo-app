@@ -1,32 +1,29 @@
-import React from 'react';
-import Filters from '../filters/filters.js';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-const Footer = ({countActiveTasks, deleteAllCompletedTasks, filterButtons, onFilterButtonClick}) => {
-    return (
-        <footer className="footer">
-            <span className="todo-count">
-                {countActiveTasks} {countActiveTasks === 1 ? 'item' : 'items'} left
-            </span>
-                <Filters
-                    filterButtons={filterButtons}
-                    onFilterButtonClick={onFilterButtonClick}/>
-            <button
-                className="clear-completed"
-                onClick={deleteAllCompletedTasks}>
-                Clear completed
-            </button>
-        </footer>
-    )
+import Filters from '../filters/filters.js'
+
+const Footer = ({ countActiveTasks, deleteAllCompletedTasks, filterButtons, onFilterButtonClick }) => {
+  return (
+    <footer className="footer">
+      <span className="todo-count">
+        {countActiveTasks} {countActiveTasks === 1 ? 'item' : 'items'} left
+      </span>
+      <Filters filterButtons={filterButtons} onFilterButtonClick={onFilterButtonClick} />
+      <button className="clear-completed" onClick={deleteAllCompletedTasks}>
+        Clear completed
+      </button>
+    </footer>
+  )
 }
 
 Footer.defaultProps = {
-    deleteAllCompletedTasks: () => {},
-    countActiveTasks: 0
+  deleteAllCompletedTasks: () => {},
+  countActiveTasks: 0,
 }
 Footer.propTypes = {
-    deleteAllCompletedTasks: PropTypes.func,
-    countActiveTasks: PropTypes.number
+  deleteAllCompletedTasks: PropTypes.func,
+  countActiveTasks: PropTypes.number,
 }
 
 export default Footer
