@@ -18,6 +18,7 @@ export default class App extends React.Component {
       tasks: [
         {
           id: this.userMaxId++,
+          previousClassName: '',
           className: 'completed',
           description: 'First',
           created: new Date(2023, 3, 28, 12),
@@ -25,6 +26,7 @@ export default class App extends React.Component {
         },
         {
           id: this.userMaxId++,
+          previousClassName: '',
           className: '',
           description: 'Second',
           created: new Date(2023, 3, 30, 9),
@@ -32,6 +34,7 @@ export default class App extends React.Component {
         },
         {
           id: this.userMaxId++,
+          previousClassName: '',
           className: '',
           description: 'Third',
           created: new Date(2023, 4, 1, 19),
@@ -117,13 +120,16 @@ export default class App extends React.Component {
     }
     this.onSubmit = (evt) => {
       evt.preventDefault()
-      this.addItem(this.state.inputValue)
-      this.setState(() => {
-        return {
-          inputValue: '',
-        }
-      })
-      this.changeFilterButtonClass(filterButtonsNames.all)
+      const value = this.state.inputValue.trim()
+      if (value) {
+        this.addItem(value)
+        this.setState(() => {
+          return {
+            inputValue: '',
+          }
+        })
+        this.changeFilterButtonClass(filterButtonsNames.all)
+      }
     }
     this.changeFilterButtonClass = (target) => {
       this.setState(({ filterButtons }) => {
@@ -194,6 +200,7 @@ export default class App extends React.Component {
         const taskIndex = tasks.findIndex((task) => task.id === Number(editButtonElement.closest('li').dataset.id))
         tasks[taskIndex] = {
           ...tasks[taskIndex],
+          previousClassName: tasks[taskIndex].className,
           className: 'editing',
           editing: true,
         }
@@ -205,6 +212,7 @@ export default class App extends React.Component {
           )
           filteredTasks[filteredTaskIndex] = {
             ...filteredTasks[filteredTaskIndex],
+            previousClassName: filteredTasks[filteredTaskIndex].className,
             className: 'editing',
             editing: true,
           }
@@ -226,15 +234,23 @@ export default class App extends React.Component {
       })
     }
     this.onEditFieldEnterKeyDown = (evt) => {
+      //TODO add escape key action
+      //TODO save current css class after editing
       if (evt.key === 'Enter') {
         const editField = evt.target
+        const newValue = editField.value.trim()
+        if (!newValue) {
+          return
+        }
         this.setState(({ tasks, filteredTasks }) => {
           const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
+          console.log(tasks[taskIndex])
           tasks[taskIndex] = {
             ...tasks[taskIndex],
-            className: '',
+            className: tasks[taskIndex].previousClassName,
+            previousClassName: '',
             editing: false,
-            description: editField.value,
+            description: newValue,
           }
           const updatedTask = tasks[taskIndex]
           const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
@@ -244,9 +260,10 @@ export default class App extends React.Component {
             )
             filteredTasks[filteredTaskIndex] = {
               ...filteredTasks[filteredTaskIndex],
-              className: '',
+              className: filteredTasks[filteredTaskIndex].previousClassName,
+              previousClassName: '',
               editing: false,
-              description: editField.value,
+              description: newValue,
             }
             const updatedFilteredTask = filteredTasks[filteredTaskIndex]
             const newFilteredTasks = [
