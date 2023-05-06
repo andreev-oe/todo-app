@@ -3,14 +3,7 @@ import PropTypes from 'prop-types'
 
 import Task from '../task/task.js'
 
-const TodoList = ({
-  onEditFieldEnterKeyDown,
-  onEditButtonClick,
-  onDelete,
-  onToggleCompleted,
-  tasks,
-  filterButtons,
-}) => {
+const TodoList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks, filterButtons }) => {
   const activeFilterButton = filterButtons.filter((button) => button.className === 'selected')[0].buttonText
   const getFilteredTasks = (tasks, filterButtonName) => {
     let filteredTasks
@@ -38,7 +31,7 @@ const TodoList = ({
             onToggleCompleted={onToggleCompleted}
             onDelete={onDelete}
             onEditButtonClick={onEditButtonClick}
-            onEditFieldEnterKeyDown={onEditFieldEnterKeyDown}
+            onEditFieldKeyDown={onEditFieldKeyDown}
           />
         )
       })}

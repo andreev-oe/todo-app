@@ -162,29 +162,46 @@ export default class App extends React.Component {
         }
       })
     }
-    this.onEditFieldEnterKeyDown = (evt) => {
-      //TODO add escape key action
-      if (evt.key === 'Enter') {
-        const editField = evt.target
-        const newValue = editField.value.trim()
-        if (!newValue) {
-          return
-        }
-        this.setState(({ tasks }) => {
-          const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
-          tasks[taskIndex] = {
-            ...tasks[taskIndex],
-            className: tasks[taskIndex].previousClassName,
-            previousClassName: '',
-            editing: false,
-            description: newValue,
+    this.onEditFieldKeyDown = (evt) => {
+      const editField = evt.target
+      const newValue = editField.value.trim()
+      switch (evt.key) {
+        case 'Enter':
+          if (!newValue) {
+            return
           }
-          const updatedTask = tasks[taskIndex]
-          const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-          return {
-            tasks: newTasks,
-          }
-        })
+          this.setState(({ tasks }) => {
+            const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
+            tasks[taskIndex] = {
+              ...tasks[taskIndex],
+              previousClassName: '',
+              className: tasks[taskIndex].previousClassName,
+              editing: false,
+              description: newValue,
+            }
+            const updatedTask = tasks[taskIndex]
+            const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
+            return {
+              tasks: newTasks,
+            }
+          })
+          break
+        case 'Escape':
+          this.setState(({ tasks }) => {
+            const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
+            tasks[taskIndex] = {
+              ...tasks[taskIndex],
+              previousClassName: '',
+              className: tasks[taskIndex].previousClassName,
+              editing: false,
+            }
+            const updatedTask = tasks[taskIndex]
+            const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
+            return {
+              tasks: newTasks,
+            }
+          })
+          break
       }
     }
   }
@@ -204,7 +221,7 @@ export default class App extends React.Component {
             onToggleCompleted={this.onToggleCompleted}
             onDelete={this.deleteItem}
             onEditButtonClick={this.onEditButtonClick}
-            onEditFieldEnterKeyDown={this.onEditFieldEnterKeyDown}
+            onEditFieldKeyDown={this.onEditFieldKeyDown}
             filterButtons={this.state.filterButtons}
           />
           <Footer

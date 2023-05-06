@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 
-const Task = ({ onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props }) => {
+const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props }) => {
   const setDate = (date) => {
     return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
   }
@@ -23,7 +23,7 @@ const Task = ({ onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCo
           type="text"
           className="edit"
           defaultValue={description}
-          onKeyDown={onEditFieldEnterKeyDown}
+          onKeyDown={onEditFieldKeyDown}
           autoFocus={true}
         />
       ) : null}
