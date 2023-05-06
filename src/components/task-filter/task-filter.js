@@ -18,13 +18,7 @@ TaskFilter.defaultProps = {
 }
 TaskFilter.propTypes = {
   onFilterButtonClick: PropTypes.func,
-  props: (props, propName, componentName) => {
-    const value = props[propName]
-    if (typeof value === 'object' && Object.keys(value).length > 0) {
-      return null
-    }
-    return new TypeError(`${componentName}: ${propName} mustn't be an empty Object`)
-  },
+  props: PropTypes.objectOf(PropTypes.any),
 }
 
 export default TaskFilter

@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 
+import { taskStatusClassName } from '../app/app.js'
+
 const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props }) => {
-  const setDate = (date) => {
-    return formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
-  }
+  const setDate = (date) => formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
   const { id, className, description, created, editing } = props
   return (
     <li className={className} data-id={id}>
@@ -21,7 +21,7 @@ const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleComplet
       {editing ? (
         <input
           type="text"
-          className="edit"
+          className={taskStatusClassName.ENABLE_EDIT}
           defaultValue={description}
           onKeyDown={onEditFieldKeyDown}
           autoFocus={true}
@@ -39,13 +39,7 @@ Task.defaultProps = {
 Task.propTypes = {
   onDelete: PropTypes.func,
   onToggleCompleted: PropTypes.func,
-  props: (props, propName, componentName) => {
-    const value = props[propName]
-    if (typeof value === 'object' && Object.keys(value).length > 0) {
-      return null
-    }
-    return new TypeError(`${componentName}: ${propName} mustn't be an empty Object`)
-  },
+  props: PropTypes.objectOf(PropTypes.any),
 }
 
 export default Task

@@ -3,11 +3,30 @@ import React from 'react'
 import NewTaskForm from '../new-task-form/new-task-form.js'
 import TodoList from '../todo-list/todo-list.js'
 import Footer from '../footer/footer.js'
-const completedTaskCssClass = 'completed'
-const filterButtonsNames = {
-  all: 'All',
-  active: 'Active',
-  completed: 'Completed',
+
+const filterButtonName = {
+  ALL: 'All',
+  ACTIVE: 'Active',
+  COMPLETED: 'Completed',
+}
+const filterButtonClassName = {
+  SELECTED: 'selected',
+  NOT_SELECTED: '',
+}
+const evtKey = {
+  ENTER: 'Enter',
+  ESCAPE: 'Escape',
+}
+const taskStatusClassName = {
+  ACTIVE: '',
+  COMPLETED: 'completed',
+  EDITING: 'editing',
+  ENABLE_EDIT: 'edit',
+}
+const updateType = {
+  START_EDITING: 'edit',
+  CANCEL_EDITING: 'canselEditing',
+  EDITED: 'edited',
 }
 
 export default class App extends React.Component {
@@ -18,24 +37,24 @@ export default class App extends React.Component {
       tasks: [
         {
           id: this.userMaxId++,
-          previousClassName: '',
-          className: 'completed',
+          previousClassName: null,
+          className: taskStatusClassName.COMPLETED,
           description: 'First',
           created: new Date(2023, 3, 28, 12),
           editing: false,
         },
         {
           id: this.userMaxId++,
-          previousClassName: '',
-          className: '',
+          previousClassName: null,
+          className: taskStatusClassName.ACTIVE,
           description: 'Second',
           created: new Date(2023, 3, 30, 9),
           editing: false,
         },
         {
           id: this.userMaxId++,
-          previousClassName: '',
-          className: '',
+          previousClassName: null,
+          className: taskStatusClassName.ACTIVE,
           description: 'Third',
           created: new Date(2023, 4, 1, 19),
           editing: false,
@@ -44,27 +63,27 @@ export default class App extends React.Component {
       filterButtons: [
         {
           id: 1,
-          className: 'selected',
-          buttonText: 'All',
+          className: filterButtonClassName.SELECTED,
+          buttonText: filterButtonName.ALL,
         },
         {
           id: 2,
-          className: '',
-          buttonText: 'Active',
+          className: filterButtonClassName.NOT_SELECTED,
+          buttonText: filterButtonName.ACTIVE,
         },
         {
           id: 3,
-          className: '',
-          buttonText: 'Completed',
+          className: filterButtonClassName.NOT_SELECTED,
+          buttonText: filterButtonName.COMPLETED,
         },
       ],
       inputValue: '',
     }
     this.onToggleCompleted = (evt) => {
       const taskInputElement = evt.target
-      let newClassName = ''
+      let newClassName = taskStatusClassName.ACTIVE
       if (taskInputElement.checked) {
-        newClassName = completedTaskCssClass
+        newClassName = taskStatusClassName.COMPLETED
       }
       this.setState(({ tasks }) => {
         const taskIndex = tasks.findIndex((task) => task.id === Number(taskInputElement.closest('li').dataset.id))
@@ -88,7 +107,7 @@ export default class App extends React.Component {
     this.addItem = (text) => {
       const newTask = {
         id: this.userMaxId++,
-        className: '',
+        className: taskStatusClassName.ACTIVE,
         description: text,
         created: new Date(),
         editing: false,
@@ -115,17 +134,16 @@ export default class App extends React.Component {
             inputValue: '',
           }
         })
-        this.changeFilterButtonClass(filterButtonsNames.all)
       }
     }
     this.changeFilterButtonClass = (target) => {
       this.setState(({ filterButtons }) => {
         const newFilteredButtons = filterButtons.map((button) => {
           if (target === button.buttonText) {
-            button.className = 'selected'
+            button.className = filterButtonClassName.SELECTED
             return button
           }
-          button.className = ''
+          button.className = filterButtonClassName.NOT_SELECTED
           return button
         })
         return {
@@ -135,11 +153,60 @@ export default class App extends React.Component {
     }
     this.onFilterButtonClick = (evt) => {
       const targetButtonName = evt.target.dataset.buttonName
-      this.changeFilterButtonClass(targetButtonName)
+      this.setState(({ filterButtons }) => {
+        const newFilteredButtons = filterButtons.map((button) => {
+          if (targetButtonName === button.buttonText) {
+            button.className = filterButtonClassName.SELECTED
+            return button
+          }
+          button.className = filterButtonClassName.NOT_SELECTED
+          return button
+        })
+        return {
+          filterButtons: newFilteredButtons,
+        }
+      })
     }
     this.deleteAllCompletedTasks = () => {
       this.setState(({ tasks }) => {
-        const newTasks = tasks.filter((task) => task.className !== completedTaskCssClass)
+        const newTasks = tasks.filter((task) => task.className !== taskStatusClassName.COMPLETED)
+        return {
+          tasks: newTasks,
+        }
+      })
+    }
+    this.updateTask = (targetElement, selectedUpdateType, newDescription = '') => {
+      this.setState(({ tasks }) => {
+        const taskIndex = tasks.findIndex((task) => task.id === Number(targetElement.closest('li').dataset.id))
+        let updatedTask
+        switch (selectedUpdateType) {
+          case updateType.START_EDITING:
+            updatedTask = {
+              ...tasks[taskIndex],
+              previousClassName: tasks[taskIndex].className,
+              className: taskStatusClassName.EDITING,
+              editing: true,
+            }
+            break
+          case updateType.CANCEL_EDITING:
+            updatedTask = {
+              ...tasks[taskIndex],
+              previousClassName: null,
+              className: tasks[taskIndex].previousClassName,
+              editing: false,
+            }
+            break
+          case updateType.EDITED:
+            updatedTask = {
+              ...tasks[taskIndex],
+              previousClassName: null,
+              className: tasks[taskIndex].previousClassName,
+              editing: false,
+              description: newDescription,
+            }
+            break
+        }
+        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
         return {
           tasks: newTasks,
         }
@@ -147,60 +214,20 @@ export default class App extends React.Component {
     }
     this.onEditButtonClick = (evt) => {
       const editButtonElement = evt.target
-      this.setState(({ tasks }) => {
-        const taskIndex = tasks.findIndex((task) => task.id === Number(editButtonElement.closest('li').dataset.id))
-        tasks[taskIndex] = {
-          ...tasks[taskIndex],
-          previousClassName: tasks[taskIndex].className,
-          className: 'editing',
-          editing: true,
-        }
-        const updatedTask = tasks[taskIndex]
-        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-        return {
-          tasks: newTasks,
-        }
-      })
+      this.updateTask(editButtonElement, updateType.START_EDITING)
     }
     this.onEditFieldKeyDown = (evt) => {
       const editField = evt.target
       const newValue = editField.value.trim()
       switch (evt.key) {
-        case 'Enter':
+        case evtKey.ESCAPE:
+          this.updateTask(editField, updateType.CANCEL_EDITING)
+          break
+        case evtKey.ENTER:
           if (!newValue) {
             return
           }
-          this.setState(({ tasks }) => {
-            const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
-            tasks[taskIndex] = {
-              ...tasks[taskIndex],
-              previousClassName: '',
-              className: tasks[taskIndex].previousClassName,
-              editing: false,
-              description: newValue,
-            }
-            const updatedTask = tasks[taskIndex]
-            const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-            return {
-              tasks: newTasks,
-            }
-          })
-          break
-        case 'Escape':
-          this.setState(({ tasks }) => {
-            const taskIndex = tasks.findIndex((task) => task.id === Number(editField.closest('li').dataset.id))
-            tasks[taskIndex] = {
-              ...tasks[taskIndex],
-              previousClassName: '',
-              className: tasks[taskIndex].previousClassName,
-              editing: false,
-            }
-            const updatedTask = tasks[taskIndex]
-            const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-            return {
-              tasks: newTasks,
-            }
-          })
+          this.updateTask(editField, updateType.EDITED, newValue)
           break
       }
     }
@@ -208,7 +235,7 @@ export default class App extends React.Component {
 
   render() {
     const { tasks } = this.state
-    const countActiveTasks = tasks.filter((task) => task.className !== completedTaskCssClass).length
+    const countActiveTasks = tasks.filter((task) => task.className !== taskStatusClassName.COMPLETED).length
     return (
       <section className="todoapp">
         <header className="header">
@@ -235,3 +262,5 @@ export default class App extends React.Component {
     )
   }
 }
+
+export { filterButtonName, taskStatusClassName }

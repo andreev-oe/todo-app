@@ -2,17 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Task from '../task/task.js'
+import { filterButtonName, taskStatusClassName } from '../app/app.js'
 
 const TodoList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks, filterButtons }) => {
-  const activeFilterButton = filterButtons.filter((button) => button.className === 'selected')[0].buttonText
-  const getFilteredTasks = (tasks, filterButtonName) => {
+  const activeFilterButton = filterButtons.find((button) => button.className === 'selected').buttonText
+  const getFilteredTasks = (tasks, clickedFilterButtonName) => {
     let filteredTasks
-    switch (filterButtonName) {
-      case 'Active':
-        filteredTasks = tasks.filter((task) => task.className === '' || task.className === 'editing')
+    switch (clickedFilterButtonName) {
+      case filterButtonName.ACTIVE:
+        filteredTasks = tasks.filter(
+          (task) => task.className === taskStatusClassName.ACTIVE || task.className === taskStatusClassName.EDITING
+        )
         break
-      case 'Completed':
-        filteredTasks = tasks.filter((task) => task.className === 'completed' || task.className === 'editing')
+      case filterButtonName.COMPLETED:
+        filteredTasks = tasks.filter(
+          (task) => task.className === taskStatusClassName.COMPLETED || task.className === taskStatusClassName.EDITING
+        )
         break
       default:
         filteredTasks = tasks
