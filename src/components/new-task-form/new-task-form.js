@@ -10,6 +10,7 @@ const NewTaskForm = ({ onInputChange, onSubmit, inputValue }) => {
         autoFocus
         onChange={onInputChange}
         value={inputValue}
+        required
       />
     </form>
   )

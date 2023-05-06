@@ -3,10 +3,33 @@ import PropTypes from 'prop-types'
 
 import Task from '../task/task.js'
 
-const TodoList = ({ onEditFieldEnterKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks }) => {
+const TodoList = ({
+  onEditFieldEnterKeyDown,
+  onEditButtonClick,
+  onDelete,
+  onToggleCompleted,
+  tasks,
+  filterButtons,
+}) => {
+  const activeFilterButton = filterButtons.filter((button) => button.className === 'selected')[0].buttonText
+  const getFilteredTasks = (tasks, filterButtonName) => {
+    let filteredTasks
+    switch (filterButtonName) {
+      case 'Active':
+        filteredTasks = tasks.filter((task) => task.className === '' || task.className === 'editing')
+        break
+      case 'Completed':
+        filteredTasks = tasks.filter((task) => task.className === 'completed' || task.className === 'editing')
+        break
+      default:
+        filteredTasks = tasks
+    }
+    return filteredTasks
+  }
+  const filteredTasks = getFilteredTasks(tasks, activeFilterButton)
   return (
     <ul className="todo-list">
-      {tasks.map((task) => {
+      {filteredTasks.map((task) => {
         const { id } = task
         return (
           <Task
