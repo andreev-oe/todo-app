@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 
-import { taskStatusClassName } from '../app/app.js'
+import { taskStatusClassName } from '../app/app.jsx'
 
 const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props }) => {
   const setDate = (date) => formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })

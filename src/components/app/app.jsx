@@ -1,8 +1,8 @@
 import React from 'react'
 
-import NewTaskForm from '../new-task-form/new-task-form.js'
-import TodoList from '../todo-list/todo-list.js'
-import Footer from '../footer/footer.js'
+import NewTaskForm from '../new-task-form/new-task-form.jsx'
+import TodoList from '../todo-list/todo-list.jsx'
+import Footer from '../footer/footer.jsx'
 
 const filterButtonName = {
   ALL: 'All',

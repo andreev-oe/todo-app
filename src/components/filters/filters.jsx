@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import TaskFilter from '../task-filter/task-filter.js'
+import TaskFilter from '../task-filter/task-filter.jsx'
 
 const Filters = ({ filterButtons, onFilterButtonClick }) => {
   return (
