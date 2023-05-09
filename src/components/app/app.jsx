@@ -1,7 +1,7 @@
 import React from 'react'
 
 import NewTaskForm from '../new-task-form/new-task-form.jsx'
-import TodoList from '../todo-list/todo-list.jsx'
+import TaskList from '../task-list/task-list.jsx'
 import Footer from '../footer/footer.jsx'
 
 const filterButtonName = {
@@ -243,7 +243,7 @@ export default class App extends React.Component {
           <NewTaskForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} inputValue={this.state.inputValue} />
         </header>
         <section className="main">
-          <TodoList
+          <TaskList
             tasks={tasks}
             onToggleCompleted={this.onToggleCompleted}
             onDelete={this.deleteItem}

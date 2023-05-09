@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Task from '../task/task.jsx'
 import { filterButtonName, taskStatusClassName } from '../app/app.jsx'
 
-const TodoList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks, filterButtons }) => {
+const TaskList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks, filterButtons }) => {
   const activeFilterButton = filterButtons.find((button) => button.className === 'selected').buttonText
   const getFilteredTasks = (tasks, clickedFilterButtonName) => {
     let filteredTasks
@@ -44,11 +44,11 @@ const TodoList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCom
   )
 }
 
-TodoList.defaultProps = {
+TaskList.defaultProps = {
   tasks: [],
 }
-TodoList.propTypes = {
+TaskList.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object),
 }
 
-export default TodoList
+export default TaskList
