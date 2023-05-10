@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Task from '../task/task.jsx'
-import { filterButtonName, taskStatusClassName } from '../app/app.jsx'
+import Task from '../Task/Task.jsx'
+import { filterButtonName, taskStatusClassName } from '../App/App.jsx'
 
 const TaskList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks, filterButtons }) => {
   const activeFilterButton = filterButtons.find((button) => button.className === 'selected').buttonText

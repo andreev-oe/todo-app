@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 
-import { taskStatusClassName } from '../app/app.jsx'
+import { taskStatusClassName } from '../App/App.jsx'
 const TIMER_INTERVAL = 1000
 const MIN_LENGTH = 2
 const SECONDS_IN_MINUTE = 60
