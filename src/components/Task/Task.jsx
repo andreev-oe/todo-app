@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 
-import { taskStatusClassName } from '../app/app.jsx'
+import { taskStatusClassName } from '../App/App.jsx'
 
 const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, props }) => {
   const setDate = (date) => formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
@@ -10,8 +10,8 @@ const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleComplet
   return (
     <li className={className} data-id={id}>
       <div className="view">
-        <input className="toggle" type="checkbox" onChange={onToggleCompleted} checked={className} />
-        <label>
+        <input id={id} className="toggle" type="checkbox" onChange={onToggleCompleted} checked={className} />
+        <label htmlFor={id}>
           <span className="description">{description}</span>
           <span className="created">{setDate(created)}</span>
         </label>

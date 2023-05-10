@@ -1,8 +1,8 @@
 import React from 'react'
 
-import NewTaskForm from '../new-task-form/new-task-form.jsx'
-import TaskList from '../task-list/task-list.jsx'
-import Footer from '../footer/footer.jsx'
+import NewTaskForm from '../NewTaskForm/NewTaskForm.jsx'
+import TaskList from '../TaskList/TaskList.jsx'
+import Footer from '../Footer/Footer.jsx'
 
 const filterButtonName = {
   ALL: 'All',
@@ -13,7 +13,7 @@ const filterButtonClassName = {
   SELECTED: 'selected',
   NOT_SELECTED: '',
 }
-const evtKey = {
+const eventKey = {
   ENTER: 'Enter',
   ESCAPE: 'Escape',
 }
@@ -220,10 +220,10 @@ export default class App extends React.Component {
       const editField = evt.target
       const newValue = editField.value.trim()
       switch (evt.key) {
-        case evtKey.ESCAPE:
+        case eventKey.ESCAPE:
           this.updateTask(editField, updateType.CANCEL_EDITING)
           break
-        case evtKey.ENTER:
+        case eventKey.ENTER:
           if (!newValue) {
             return
           }
