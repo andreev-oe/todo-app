@@ -12,8 +12,13 @@ const Task = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleComplet
       <div className="view">
         <input className="toggle" type="checkbox" onChange={onToggleCompleted} checked={className} />
         <label>
-          <span className="description">{description}</span>
-          <span className="created">{setDate(created)}</span>
+          <span className="title">{description}</span>
+          <span className="description">
+            <button className="icon icon-play"></button>
+            <button className="icon icon-pause"></button>
+            {' 12:25 '}
+          </span>
+          <span className="description">{setDate(created)}</span>
         </label>
         <button className="icon icon-edit" onClick={onEditButtonClick}></button>
         <button className="icon icon-destroy" onClick={onDelete}></button>
