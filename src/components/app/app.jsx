@@ -42,12 +42,6 @@ export default class App extends React.Component {
           description: 'First',
           created: new Date(2023, 3, 28, 12),
           editing: false,
-          startTime: Date.now(),
-          endTime: 0,
-          elapsedTime: 0,
-          totalTime: 0,
-          startedCounting: false,
-          taskTimerInterval: null,
         },
         {
           id: this.userMaxId++,
@@ -56,12 +50,6 @@ export default class App extends React.Component {
           description: 'Second',
           created: new Date(2023, 3, 30, 9),
           editing: false,
-          startTime: Date.now(),
-          endTime: 0,
-          elapsedTime: 0,
-          totalTime: 0,
-          startedCounting: false,
-          taskTimerInterval: null,
         },
         {
           id: this.userMaxId++,
@@ -70,12 +58,6 @@ export default class App extends React.Component {
           description: 'Third',
           created: new Date(2023, 4, 1, 19),
           editing: false,
-          startTime: Date.now(),
-          endTime: 0,
-          elapsedTime: 0,
-          totalTime: 0,
-          startedCounting: false,
-          taskTimerInterval: null,
         },
       ],
       filterButtons: [
@@ -129,12 +111,6 @@ export default class App extends React.Component {
         description: text,
         created: new Date(),
         editing: false,
-        startTime: Date.now(),
-        endTime: 0,
-        elapsedTime: 0,
-        totalTime: 0,
-        startedCounting: false,
-        taskTimerInterval: null,
       }
       this.setState(({ tasks }) => {
         const newTasks = [...tasks, newTask]
@@ -239,59 +215,6 @@ export default class App extends React.Component {
           this.updateTask(editField, updateType.EDITED, newValue)
           break
       }
-    }
-    this.startTimer = (evt) => {
-      const taskIndex = this.state.tasks.findIndex((task) => task.id === Number(evt.target.dataset.id))
-      if (this.state.tasks[taskIndex].startedCounting) {
-        return
-      }
-      this.setState(({ tasks }) => {
-        let updatedTask
-        updatedTask = {
-          ...tasks[taskIndex],
-        }
-        updatedTask.startTime = Date.now()
-        updatedTask.startedCounting = true
-        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-        return {
-          tasks: newTasks,
-        }
-      })
-      const taskTimerInterval = setInterval(() => {
-        this.setState(({ tasks }) => {
-          let updatedTask
-          updatedTask = {
-            ...tasks[taskIndex],
-          }
-          updatedTask.endTime = Date.now()
-          updatedTask.elapsedTime = updatedTask.endTime - updatedTask.startTime + updatedTask.totalTime
-          updatedTask.taskTimerInterval = taskTimerInterval
-          const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-          return {
-            tasks: newTasks,
-          }
-        })
-      }, 1000)
-    }
-    this.stopTimer = (evt) => {
-      const taskIndex = this.state.tasks.findIndex(
-        (task) => task.id === evt || task.id === Number(evt.target?.dataset.id)
-      )
-      this.setState(({ tasks }) => {
-        let updatedTask
-        updatedTask = {
-          ...tasks[taskIndex],
-        }
-        updatedTask.totalTime = updatedTask.elapsedTime
-        updatedTask.startTime = null
-        updatedTask.endTime = null
-        updatedTask.startedCounting = false
-        clearInterval(updatedTask.taskTimerInterval)
-        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
-        return {
-          tasks: newTasks,
-        }
-      })
     }
   }
 
