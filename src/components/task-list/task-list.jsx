@@ -4,7 +4,16 @@ import PropTypes from 'prop-types'
 import Task from '../task/task.jsx'
 import { filterButtonName, taskStatusClassName } from '../app/app.jsx'
 
-const TaskList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, tasks, filterButtons }) => {
+const TaskList = ({
+  onEditFieldKeyDown,
+  onEditButtonClick,
+  onDelete,
+  onToggleCompleted,
+  tasks,
+  filterButtons,
+  startTimer,
+  stopTimer,
+}) => {
   const activeFilterButton = filterButtons.find((button) => button.className === 'selected').buttonText
   const getFilteredTasks = (tasks, clickedFilterButtonName) => {
     let filteredTasks
@@ -32,11 +41,14 @@ const TaskList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCom
         return (
           <Task
             key={id}
+            id={id}
             props={task}
             onToggleCompleted={onToggleCompleted}
             onDelete={onDelete}
             onEditButtonClick={onEditButtonClick}
             onEditFieldKeyDown={onEditFieldKeyDown}
+            startTimer={startTimer}
+            stopTimer={stopTimer}
           />
         )
       })}
