@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import { formatDistanceToNow } from 'date-fns'
 
 import { taskStatusClassName } from '../app/app.jsx'
+const TIMER_INTERVAL = 1000
+const MIN_LENGTH = 2
+const SECONDS_IN_MINUTE = 60
+const MILLISECONDS_IN_SECOND = 1000
 
 export default class Task extends React.Component {
   constructor(props) {
@@ -32,7 +36,7 @@ export default class Task extends React.Component {
             taskTimerInterval: taskTimerInterval,
           }
         })
-      }, 1000)
+      }, TIMER_INTERVAL)
     }
     this.stopTimer = () => {
       this.setState(({ taskTimerInterval, elapsedTime }) => {
@@ -53,11 +57,12 @@ export default class Task extends React.Component {
     const { onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCompleted, task } = this.props
     const { elapsedTime } = this.state
     const setDate = (date) => formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
+    const formatTime = (time) => time.padStart(MIN_LENGTH, '0')
     const { id, className, description, created, editing } = task
-    let timeStampToSeconds = Math.floor(elapsedTime / 1000)
-    let hours = String(Math.floor(timeStampToSeconds / 60 / 60))
-    let minutes = String(Math.floor(timeStampToSeconds / 60) - hours * 60)
-    let seconds = String(Math.floor(timeStampToSeconds % 60))
+    let timeStampToSeconds = Math.floor(elapsedTime / MILLISECONDS_IN_SECOND)
+    let hours = String(Math.floor(timeStampToSeconds / SECONDS_IN_MINUTE / SECONDS_IN_MINUTE))
+    let minutes = String(Math.floor(timeStampToSeconds / SECONDS_IN_MINUTE) - hours * SECONDS_IN_MINUTE)
+    let seconds = String(Math.floor(timeStampToSeconds % SECONDS_IN_MINUTE))
     return (
       <li className={className} data-id={id}>
         <div className="view">
@@ -68,7 +73,7 @@ export default class Task extends React.Component {
               <button className="icon icon-play" data-id={id} onClick={this.startTimer}></button>
               <button className="icon icon-pause" data-id={id} onClick={this.stopTimer}></button>
               <span className="estimated-time">
-                {`${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`}
+                {`${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`}
               </span>
             </span>
             <span className="description">{setDate(created)}</span>
@@ -91,12 +96,16 @@ export default class Task extends React.Component {
 }
 
 Task.defaultProps = {
+  onEditFieldKeyDown: () => {},
+  onEditButtonClick: () => {},
   onDelete: () => {},
   onToggleCompleted: () => {},
-  props: {},
+  task: {},
 }
 Task.propTypes = {
+  onEditFieldKeyDown: PropTypes.func,
+  onEditButtonClick: PropTypes.func,
   onDelete: PropTypes.func,
   onToggleCompleted: PropTypes.func,
-  props: PropTypes.objectOf(PropTypes.any),
+  task: PropTypes.objectOf(PropTypes.any),
 }
