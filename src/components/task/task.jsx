@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { formatDistanceToNow, millisecondsToSeconds } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns'
 
 import { taskStatusClassName } from '../app/app.jsx'
 
@@ -17,6 +17,10 @@ export default class Task extends React.Component {
       this.props
     const setDate = (date) => formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
     const { id, className, description, created, editing, elapsedTime } = props
+    let timeStampToSeconds = Math.floor(elapsedTime / 1000)
+    let hours = String(Math.floor(timeStampToSeconds / 60 / 60))
+    let minutes = String(Math.floor(timeStampToSeconds / 60) - hours * 60)
+    let seconds = String(Math.floor(timeStampToSeconds % 60))
     return (
       <li className={className} data-id={id}>
         <div className="view">
@@ -26,7 +30,9 @@ export default class Task extends React.Component {
             <span className="description">
               <button className="icon icon-play" data-id={id} onClick={startTimer}></button>
               <button className="icon icon-pause" data-id={id} onClick={stopTimer}></button>
-              <span className="estimated-time">{`${millisecondsToSeconds(elapsedTime)}`}</span>
+              <span className="estimated-time">
+                {`${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`}
+              </span>
             </span>
             <span className="description">{setDate(created)}</span>
           </label>

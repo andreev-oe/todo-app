@@ -46,6 +46,7 @@ export default class App extends React.Component {
           endTime: 0,
           elapsedTime: 0,
           totalTime: 0,
+          startedCounting: false,
           taskTimerInterval: null,
         },
         {
@@ -59,6 +60,7 @@ export default class App extends React.Component {
           endTime: 0,
           elapsedTime: 0,
           totalTime: 0,
+          startedCounting: false,
           taskTimerInterval: null,
         },
         {
@@ -72,6 +74,7 @@ export default class App extends React.Component {
           endTime: 0,
           elapsedTime: 0,
           totalTime: 0,
+          startedCounting: false,
           taskTimerInterval: null,
         },
       ],
@@ -130,6 +133,7 @@ export default class App extends React.Component {
         endTime: 0,
         elapsedTime: 0,
         totalTime: 0,
+        startedCounting: false,
         taskTimerInterval: null,
       }
       this.setState(({ tasks }) => {
@@ -238,12 +242,16 @@ export default class App extends React.Component {
     }
     this.startTimer = (evt) => {
       const taskIndex = this.state.tasks.findIndex((task) => task.id === Number(evt.target.dataset.id))
+      if (this.state.tasks[taskIndex].startedCounting) {
+        return
+      }
       this.setState(({ tasks }) => {
         let updatedTask
         updatedTask = {
           ...tasks[taskIndex],
         }
         updatedTask.startTime = Date.now()
+        updatedTask.startedCounting = true
         const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
         return {
           tasks: newTasks,
@@ -269,7 +277,6 @@ export default class App extends React.Component {
       const taskIndex = this.state.tasks.findIndex(
         (task) => task.id === evt || task.id === Number(evt.target?.dataset.id)
       )
-      console.log('stopTimer')
       this.setState(({ tasks }) => {
         let updatedTask
         updatedTask = {
@@ -278,6 +285,7 @@ export default class App extends React.Component {
         updatedTask.totalTime = updatedTask.elapsedTime
         updatedTask.startTime = null
         updatedTask.endTime = null
+        updatedTask.startedCounting = false
         clearInterval(updatedTask.taskTimerInterval)
         const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
         return {
