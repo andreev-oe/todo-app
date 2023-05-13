@@ -102,7 +102,6 @@ export default class App extends React.Component {
       })
     }
     this.onToggleCompleted = (evt) => {
-      console.log(evt)
       const taskInputElement = evt.target || evt
       let newClassName = taskStatusClassName.ACTIVE
       if (taskInputElement.checked) {

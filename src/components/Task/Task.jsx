@@ -17,7 +17,7 @@ export default class Task extends React.Component {
     this.state = {
       previousTimeStamp: null,
       currentTimeStamp: null,
-      totalTime: (this.props.task.minutes * SECONDS_IN_MINUTE + this.props.task.seconds) * MILLISECONDS_IN_SECOND,
+      totalTime: this.props.task.minutes * SECONDS_IN_MINUTE + this.props.task.seconds,
       startedCounting: false,
     }
     this.startTimer = () => {
@@ -30,9 +30,9 @@ export default class Task extends React.Component {
           startedCounting: true,
         }
       })
-      const taskTimerInterval = setInterval(() => {
+      this.taskTimerInterval = setInterval(() => {
         this.setState(({ previousTimeStamp, currentTimeStamp, totalTime }) => {
-          if (totalTime / MILLISECONDS_IN_SECOND < 1) {
+          if (totalTime < 1) {
             clearInterval(this.taskTimerInterval)
             document.querySelectorAll(`.${CHECKBOX_CSS_CLASS}`).forEach((node) => {
               if (Number(node.id) === this.props.task.id) {
@@ -47,10 +47,10 @@ export default class Task extends React.Component {
             }
           }
           currentTimeStamp = Date.now()
-          const elapsedTime = currentTimeStamp - previousTimeStamp
+          const elapsedTime = (currentTimeStamp - previousTimeStamp) / MILLISECONDS_IN_SECOND
           totalTime = totalTime - elapsedTime
-          const minutes = Math.floor(totalTime / MILLISECONDS_IN_SECOND / SECONDS_IN_MINUTE)
-          const seconds = Math.floor((totalTime / MILLISECONDS_IN_SECOND) % SECONDS_IN_MINUTE)
+          const minutes = Math.floor(totalTime / SECONDS_IN_MINUTE)
+          const seconds = Math.floor(totalTime % SECONDS_IN_MINUTE)
           this.props.updateTimerTime(this.props.task.id, minutes, seconds)
           return {
             totalTime: totalTime,
@@ -58,7 +58,6 @@ export default class Task extends React.Component {
           }
         })
       }, TIMER_INTERVAL)
-      this.taskTimerInterval = taskTimerInterval
     }
     this.stopTimer = () => {
       this.setState(() => {
@@ -79,10 +78,9 @@ export default class Task extends React.Component {
     const { totalTime, startedCounting } = this.state
     const setDate = (date) => formatDistanceToNow(date, { addSuffix: true, includeSeconds: true })
     const formatTime = (time) => String(time).padStart(MIN_LENGTH, '0')
-    let timeStampToSeconds = Math.floor(totalTime / MILLISECONDS_IN_SECOND)
-    let hours = String(Math.floor(timeStampToSeconds / SECONDS_IN_MINUTE / SECONDS_IN_MINUTE))
-    let minutes = String(Math.floor(timeStampToSeconds / SECONDS_IN_MINUTE) - hours * SECONDS_IN_MINUTE)
-    let seconds = String(Math.floor(timeStampToSeconds % SECONDS_IN_MINUTE))
+    let hours = String(Math.floor(totalTime / SECONDS_IN_MINUTE / SECONDS_IN_MINUTE))
+    let minutes = String(Math.floor(totalTime / SECONDS_IN_MINUTE) - hours * SECONDS_IN_MINUTE)
+    let seconds = String(Math.floor(totalTime % SECONDS_IN_MINUTE))
     return (
       <li className={className} data-id={id}>
         <div className="view">
