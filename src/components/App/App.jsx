@@ -42,6 +42,8 @@ export default class App extends React.Component {
           description: 'First',
           created: new Date(2023, 3, 28, 12),
           editing: false,
+          minutes: 1,
+          seconds: 1,
         },
         {
           id: this.userMaxId++,
@@ -50,6 +52,8 @@ export default class App extends React.Component {
           description: 'Second',
           created: new Date(2023, 3, 30, 9),
           editing: false,
+          minutes: 0,
+          seconds: 5,
         },
         {
           id: this.userMaxId++,
@@ -58,6 +62,8 @@ export default class App extends React.Component {
           description: 'Third',
           created: new Date(2023, 4, 1, 19),
           editing: false,
+          minutes: 8,
+          seconds: 8,
         },
       ],
       filterButtons: [
@@ -77,10 +83,27 @@ export default class App extends React.Component {
           buttonText: filterButtonName.COMPLETED,
         },
       ],
-      inputValue: '',
+      inputTask: '',
+      inputMinutes: '',
+      inputSeconds: '',
+    }
+    this.updateTimerTime = (id, minutes, seconds) => {
+      this.setState(({ tasks }) => {
+        const taskIndex = tasks.findIndex((task) => task.id === id)
+        let updatedTask = {
+          ...tasks[taskIndex],
+          minutes: minutes,
+          seconds: seconds,
+        }
+        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
+        return {
+          tasks: newTasks,
+        }
+      })
     }
     this.onToggleCompleted = (evt) => {
-      const taskInputElement = evt.target
+      console.log(evt)
+      const taskInputElement = evt.target || evt
       let newClassName = taskStatusClassName.ACTIVE
       if (taskInputElement.checked) {
         newClassName = taskStatusClassName.COMPLETED
@@ -104,13 +127,15 @@ export default class App extends React.Component {
         }
       })
     }
-    this.addItem = (text) => {
+    this.addItem = (text, minutes, seconds) => {
       const newTask = {
         id: this.userMaxId++,
         className: taskStatusClassName.ACTIVE,
         description: text,
         created: new Date(),
         editing: false,
+        minutes: minutes,
+        seconds: seconds,
       }
       this.setState(({ tasks }) => {
         const newTasks = [...tasks, newTask]
@@ -120,18 +145,37 @@ export default class App extends React.Component {
       })
     }
     this.onInputChange = (evt) => {
-      this.setState({
-        inputValue: evt.target.value,
-      })
+      const inputFiledName = evt.target.placeholder
+      switch (inputFiledName) {
+        case 'Min':
+          this.setState({
+            inputMinutes: evt.target.value,
+          })
+          break
+        case 'Sec':
+          this.setState({
+            inputSeconds: evt.target.value,
+          })
+          break
+        default:
+          this.setState({
+            inputTask: evt.target.value,
+          })
+          break
+      }
     }
     this.onSubmit = (evt) => {
       evt.preventDefault()
-      const value = this.state.inputValue.trim()
-      if (value) {
-        this.addItem(value)
+      const text = this.state.inputTask.trim()
+      const minutes = Math.round(this.state.inputMinutes)
+      const seconds = Math.round(this.state.inputSeconds)
+      if (text) {
+        this.addItem(text, minutes, seconds)
         this.setState(() => {
           return {
-            inputValue: '',
+            inputTask: '',
+            inputMinutes: '',
+            inputSeconds: '',
           }
         })
       }
@@ -225,7 +269,13 @@ export default class App extends React.Component {
       <section className="todoapp">
         <header className="header">
           <h1>Todos</h1>
-          <NewTaskForm onInputChange={this.onInputChange} onSubmit={this.onSubmit} inputValue={this.state.inputValue} />
+          <NewTaskForm
+            onInputChange={this.onInputChange}
+            onSubmit={this.onSubmit}
+            inputTask={this.state.inputTask}
+            inputMinutes={this.state.inputMinutes}
+            inputSeconds={this.state.inputSeconds}
+          />
         </header>
         <section className="main">
           <TaskList
@@ -237,6 +287,7 @@ export default class App extends React.Component {
             filterButtons={this.state.filterButtons}
             startTimer={this.startTimer}
             stopTimer={this.stopTimer}
+            updateTimerTime={this.updateTimerTime}
           />
           <Footer
             countActiveTasks={countActiveTasks}
