@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Task from '../Task/Task.jsx'
+import { Task } from '../Task/index.js'
 import { filterButtonName, taskStatusClassName } from '../App/App.jsx'
 
 const TaskList = ({

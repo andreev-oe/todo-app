@@ -1,8 +1,8 @@
 import React from 'react'
 
-import NewTaskForm from '../NewTaskForm/NewTaskForm.jsx'
-import TaskList from '../TaskList/TaskList.jsx'
-import Footer from '../Footer/Footer.jsx'
+import { NewTaskForm } from '../NewTaskForm/index.js'
+import { TaskList } from '../TaskList/index.js'
+import { Footer } from '../Footer/index.js'
 
 const filterButtonName = {
   ALL: 'All',

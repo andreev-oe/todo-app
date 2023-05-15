@@ -20,6 +20,8 @@ const NewTaskForm = ({ onInputChange, onSubmit, inputTask, inputMinutes, inputSe
         placeholder="Min"
         onChange={onInputChange}
         value={inputMinutes}
+        required
+        min={0}
       />
       <input
         type="number"
@@ -28,6 +30,9 @@ const NewTaskForm = ({ onInputChange, onSubmit, inputTask, inputMinutes, inputSe
         placeholder="Sec"
         onChange={onInputChange}
         value={inputSeconds}
+        required
+        min={0}
+        max={60}
       />
       <button type="submit"></button>
     </form>
