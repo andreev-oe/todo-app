@@ -88,14 +88,14 @@ export default class App extends React.Component {
       inputSeconds: '',
     }
     this.updateTimerTime = (id, minutes, seconds) => {
-      this.setState(({ tasks }) => {
-        const taskIndex = tasks.findIndex((task) => task.id === id)
-        let updatedTask = {
-          ...tasks[taskIndex],
-          minutes: minutes,
-          seconds: seconds,
-        }
-        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
+      const taskIndex = this.state.tasks.findIndex((task) => task.id === id)
+      let updatedTask = {
+        ...this.state.tasks[taskIndex],
+        minutes: minutes,
+        seconds: seconds,
+      }
+      const newTasks = [...this.state.tasks.slice(0, taskIndex), updatedTask, ...this.state.tasks.slice(taskIndex + 1)]
+      this.setState(() => {
         return {
           tasks: newTasks,
         }
@@ -107,10 +107,12 @@ export default class App extends React.Component {
       if (taskInputElement.checked) {
         newClassName = taskStatusClassName.COMPLETED
       }
-      this.setState(({ tasks }) => {
-        const taskIndex = tasks.findIndex((task) => task.id === Number(taskInputElement.closest('li').dataset.id))
-        const newTasks = [...tasks]
-        newTasks[taskIndex].className = newClassName
+      const taskIndex = this.state.tasks.findIndex(
+        (task) => task.id === Number(taskInputElement.closest('li').dataset.id)
+      )
+      const newTasks = [...this.state.tasks]
+      newTasks[taskIndex].className = newClassName
+      this.setState(() => {
         return {
           tasks: newTasks,
         }
@@ -118,9 +120,11 @@ export default class App extends React.Component {
     }
     this.deleteItem = (evt) => {
       const deleteButtonElement = evt.target
-      this.setState(({ tasks }) => {
-        const taskIndex = tasks.findIndex((task) => task.id === Number(deleteButtonElement.closest('li').dataset.id))
-        const newTasks = [...tasks.slice(0, taskIndex), ...tasks.slice(taskIndex + 1)]
+      const taskIndex = this.state.tasks.findIndex(
+        (task) => task.id === Number(deleteButtonElement.closest('li').dataset.id)
+      )
+      const newTasks = [...this.state.tasks.slice(0, taskIndex), ...this.state.tasks.slice(taskIndex + 1)]
+      this.setState(() => {
         return {
           tasks: newTasks,
         }
@@ -136,8 +140,8 @@ export default class App extends React.Component {
         minutes: minutes,
         seconds: seconds,
       }
-      this.setState(({ tasks }) => {
-        const newTasks = [...tasks, newTask]
+      const newTasks = [...this.state.tasks, newTask]
+      this.setState(() => {
         return {
           tasks: newTasks,
         }
@@ -181,60 +185,60 @@ export default class App extends React.Component {
     }
     this.onFilterButtonClick = (evt) => {
       const targetButtonName = evt.target.dataset.buttonName
-      this.setState(({ filterButtons }) => {
-        const newFilteredButtons = filterButtons.map((button) => {
-          if (targetButtonName === button.buttonText) {
-            button.className = filterButtonClassName.SELECTED
-            return button
-          }
-          button.className = filterButtonClassName.NOT_SELECTED
+      const newFilteredButtons = this.state.filterButtons.map((button) => {
+        if (targetButtonName === button.buttonText) {
+          button.className = filterButtonClassName.SELECTED
           return button
-        })
+        }
+        button.className = filterButtonClassName.NOT_SELECTED
+        return button
+      })
+      this.setState(() => {
         return {
           filterButtons: newFilteredButtons,
         }
       })
     }
     this.deleteAllCompletedTasks = () => {
-      this.setState(({ tasks }) => {
-        const newTasks = tasks.filter((task) => task.className !== taskStatusClassName.COMPLETED)
+      const newTasks = this.state.tasks.filter((task) => task.className !== taskStatusClassName.COMPLETED)
+      this.setState(() => {
         return {
           tasks: newTasks,
         }
       })
     }
     this.updateTask = (targetElement, selectedUpdateType, newDescription = '') => {
-      this.setState(({ tasks }) => {
-        const taskIndex = tasks.findIndex((task) => task.id === Number(targetElement.closest('li').dataset.id))
-        let updatedTask
-        switch (selectedUpdateType) {
-          case updateType.START_EDITING:
-            updatedTask = {
-              ...tasks[taskIndex],
-              previousClassName: tasks[taskIndex].className,
-              className: taskStatusClassName.EDITING,
-              editing: true,
-            }
-            break
-          case updateType.CANCEL_EDITING:
-            updatedTask = {
-              ...tasks[taskIndex],
-              previousClassName: null,
-              className: tasks[taskIndex].previousClassName,
-              editing: false,
-            }
-            break
-          case updateType.EDITED:
-            updatedTask = {
-              ...tasks[taskIndex],
-              previousClassName: null,
-              className: tasks[taskIndex].previousClassName,
-              editing: false,
-              description: newDescription,
-            }
-            break
-        }
-        const newTasks = [...tasks.slice(0, taskIndex), updatedTask, ...tasks.slice(taskIndex + 1)]
+      const taskIndex = this.state.tasks.findIndex((task) => task.id === Number(targetElement.closest('li').dataset.id))
+      let updatedTask
+      switch (selectedUpdateType) {
+        case updateType.START_EDITING:
+          updatedTask = {
+            ...this.state.tasks[taskIndex],
+            previousClassName: this.state.tasks[taskIndex].className,
+            className: taskStatusClassName.EDITING,
+            editing: true,
+          }
+          break
+        case updateType.CANCEL_EDITING:
+          updatedTask = {
+            ...this.state.tasks[taskIndex],
+            previousClassName: null,
+            className: this.state.tasks[taskIndex].previousClassName,
+            editing: false,
+          }
+          break
+        case updateType.EDITED:
+          updatedTask = {
+            ...this.state.tasks[taskIndex],
+            previousClassName: null,
+            className: this.state.tasks[taskIndex].previousClassName,
+            editing: false,
+            description: newDescription,
+          }
+          break
+      }
+      const newTasks = [...this.state.tasks.slice(0, taskIndex), updatedTask, ...this.state.tasks.slice(taskIndex + 1)]
+      this.setState(() => {
         return {
           tasks: newTasks,
         }

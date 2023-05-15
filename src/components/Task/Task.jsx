@@ -31,37 +31,40 @@ export default class Task extends React.Component {
         }
       })
       this.taskTimerInterval = setInterval(() => {
-        this.setState(({ previousTimeStamp, currentTimeStamp, totalTime }) => {
-          if (totalTime < 1) {
-            clearInterval(this.taskTimerInterval)
-            document.querySelectorAll(`.${CHECKBOX_CSS_CLASS}`).forEach((node) => {
-              if (Number(node.id) === this.props.task.id) {
-                node.checked = 'true'
-                this.props.onToggleCompleted(node)
-              }
-            })
+        if (this.state.totalTime < 1) {
+          clearInterval(this.taskTimerInterval)
+          document.querySelectorAll(`.${CHECKBOX_CSS_CLASS}`).forEach((node) => {
+            if (Number(node.id) === this.props.task.id) {
+              node.checked = 'true'
+              this.props.onToggleCompleted(node)
+            }
+          })
+          this.setState(() => {
             return {
-              totalTime: totalTime,
-              previousTimeStamp: currentTimeStamp,
+              totalTime: this.state.totalTime,
+              previousTimeStamp: this.state.currentTimeStamp,
               startedCounting: false,
             }
-          }
-          currentTimeStamp = Date.now()
-          const elapsedTime = (currentTimeStamp - previousTimeStamp) / MILLISECONDS_IN_SECOND
-          totalTime = totalTime - elapsedTime
-          const minutes = Math.floor(totalTime / SECONDS_IN_MINUTE)
-          const seconds = Math.floor(totalTime % SECONDS_IN_MINUTE)
+          })
+        } else {
+          const newTimeStamp = Date.now()
+          const elapsedTime = (newTimeStamp - this.state.previousTimeStamp) / MILLISECONDS_IN_SECOND
+          const newTotalTime = this.state.totalTime - elapsedTime
+          const minutes = Math.floor(newTotalTime / SECONDS_IN_MINUTE)
+          const seconds = Math.floor(newTotalTime % SECONDS_IN_MINUTE)
           this.props.updateTimerTime(this.props.task.id, minutes, seconds)
-          return {
-            totalTime: totalTime,
-            previousTimeStamp: currentTimeStamp,
-          }
-        })
+          this.setState(() => {
+            return {
+              totalTime: newTotalTime,
+              previousTimeStamp: newTimeStamp,
+            }
+          })
+        }
       }, TIMER_INTERVAL)
     }
     this.stopTimer = () => {
+      clearInterval(this.taskTimerInterval)
       this.setState(() => {
-        clearInterval(this.taskTimerInterval)
         return {
           startedCounting: false,
         }
