@@ -41,12 +41,12 @@ const NewTaskForm = ({ onInputChange, onSubmit, inputTask, inputMinutes, inputSe
 
 NewTaskForm.defaultProps = {
   onInputChange: () => {},
-  // onSubmit: () => {},
+  onSubmit: () => {},
   inputValue: '',
 }
 NewTaskForm.propTypes = {
   onInputChange: PropTypes.func,
-  // onSubmit: PropTypes.func,
+  onSubmit: PropTypes.func,
   inputValue: PropTypes.string,
 }
 

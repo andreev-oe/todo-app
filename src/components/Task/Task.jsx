@@ -118,7 +118,7 @@ export default class Task extends React.Component {
             className={taskStatusClassName.ENABLE_EDIT}
             defaultValue={description}
             onKeyDown={onEditFieldKeyDown}
-            autoFocus={true}
+            autoFocus
           />
         ) : null}
       </li>
