@@ -32,7 +32,8 @@ const TaskList = ({ onEditFieldKeyDown, onEditButtonClick, onDelete, onToggleCom
         return (
           <Task
             key={id}
-            props={task}
+            id={id}
+            task={task}
             onToggleCompleted={onToggleCompleted}
             onDelete={onDelete}
             onEditButtonClick={onEditButtonClick}

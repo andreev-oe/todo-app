@@ -136,21 +136,6 @@ export default class App extends React.Component {
         })
       }
     }
-    this.changeFilterButtonClass = (target) => {
-      this.setState(({ filterButtons }) => {
-        const newFilteredButtons = filterButtons.map((button) => {
-          if (target === button.buttonText) {
-            button.className = filterButtonClassName.SELECTED
-            return button
-          }
-          button.className = filterButtonClassName.NOT_SELECTED
-          return button
-        })
-        return {
-          filterButtons: newFilteredButtons,
-        }
-      })
-    }
     this.onFilterButtonClick = (evt) => {
       const targetButtonName = evt.target.dataset.buttonName
       this.setState(({ filterButtons }) => {
@@ -250,6 +235,8 @@ export default class App extends React.Component {
             onEditButtonClick={this.onEditButtonClick}
             onEditFieldKeyDown={this.onEditFieldKeyDown}
             filterButtons={this.state.filterButtons}
+            startTimer={this.startTimer}
+            stopTimer={this.stopTimer}
           />
           <Footer
             countActiveTasks={countActiveTasks}
