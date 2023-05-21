@@ -40,7 +40,6 @@ const TaskList = ({
         return (
           <Task
             key={id}
-            id={id}
             task={task}
             onToggleCompleted={onToggleCompleted}
             onDelete={onDelete}

@@ -43,7 +43,7 @@ export default class App extends React.Component {
           created: new Date(2023, 3, 28, 12),
           editing: false,
           minutes: 1,
-          seconds: 1,
+          seconds: 31,
         },
         {
           id: this.userMaxId++,
@@ -53,7 +53,7 @@ export default class App extends React.Component {
           created: new Date(2023, 3, 30, 9),
           editing: false,
           minutes: 0,
-          seconds: 5,
+          seconds: 15,
         },
         {
           id: this.userMaxId++,
