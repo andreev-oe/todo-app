@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Filters from '../Filters/Filters.jsx'
+import { Filters } from '../Filters/index.js'
 
 const Footer = ({ countActiveTasks, deleteAllCompletedTasks, filterButtons, onFilterButtonClick }) => {
   return (

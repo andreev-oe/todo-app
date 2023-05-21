@@ -6,6 +6,20 @@ body {
   overflow-x: hidden;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number]{
+  -moz-appearance: textfield;
+}
+
+.counting-true {
+  background-color: greenyellow;
+}
+
 .estimated-time {
   padding-left: 10px ;
 }
