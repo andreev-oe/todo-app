@@ -35,10 +35,6 @@ const Task = ({ task, onToggleCompleted, onDelete, onEditButtonClick, onEditFiel
               onToggleCompleted(node)
             }
           })
-        } else {
-          const minutes = Math.floor(newTotalTime / SECONDS_IN_MINUTE)
-          const seconds = Math.floor(newTotalTime % SECONDS_IN_MINUTE)
-          updateTimerTime(task.id, minutes, seconds)
         }
         setTotalTime(newTotalTime <= 0 ? 0 : newTotalTime)
         setPreviousTimeStamp(newTotalTime <= 0 ? previousTimeStamp : newTimeStamp)
@@ -46,9 +42,12 @@ const Task = ({ task, onToggleCompleted, onDelete, onEditButtonClick, onEditFiel
       }, TIMER_INTERVAL)
     }
     return () => {
+      const minutes = Math.floor(totalTime / SECONDS_IN_MINUTE)
+      const seconds = Math.floor(totalTime % SECONDS_IN_MINUTE)
+      updateTimerTime(task.id, minutes, seconds)
       clearInterval(taskTimerInterval)
     }
-  }, [startedCounting])
+  }, [startedCounting, totalTime])
   const startTimer = () => {
     setPreviousTimeStamp(Date.now() + FIRST_TICK_OFFSET)
     setStartedCounting(true)
@@ -76,7 +75,7 @@ const Task = ({ task, onToggleCompleted, onDelete, onEditButtonClick, onEditFiel
             ></button>
             <button className="icon icon-pause" data-id={id} onClick={stopTimer}></button>
             <span className="estimated-time">
-              {`${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)} ${startedCounting}`}
+              {`${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`}
             </span>
           </span>
           <span className="description">{setDate(created)}</span>
