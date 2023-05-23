@@ -29,57 +29,14 @@ const updateType = {
   EDITED: 'edited',
 }
 let userMaxId = 1000
-
+const filterButtonsInitialState = {
+  All: filterButtonClassName.SELECTED,
+  Active: filterButtonClassName.NOT_SELECTED,
+  Completed: filterButtonClassName.NOT_SELECTED,
+}
 const App = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: userMaxId++,
-      previousClassName: null,
-      className: taskStatusClassName.COMPLETED,
-      description: 'First',
-      created: new Date(2023, 3, 28, 12),
-      editing: false,
-      minutes: 1,
-      seconds: 31,
-    },
-    {
-      id: userMaxId++,
-      previousClassName: null,
-      className: taskStatusClassName.ACTIVE,
-      description: 'Second',
-      created: new Date(2023, 3, 30, 9),
-      editing: false,
-      minutes: 0,
-      seconds: 15,
-    },
-    {
-      id: userMaxId++,
-      previousClassName: null,
-      className: taskStatusClassName.ACTIVE,
-      description: 'Third',
-      created: new Date(2023, 4, 1, 19),
-      editing: false,
-      minutes: 8,
-      seconds: 8,
-    },
-  ])
-  const [filterButtons, setFilterButtons] = useState([
-    {
-      id: 1,
-      className: filterButtonClassName.SELECTED,
-      buttonText: filterButtonName.ALL,
-    },
-    {
-      id: 2,
-      className: filterButtonClassName.NOT_SELECTED,
-      buttonText: filterButtonName.ACTIVE,
-    },
-    {
-      id: 3,
-      className: filterButtonClassName.NOT_SELECTED,
-      buttonText: filterButtonName.COMPLETED,
-    },
-  ])
+  const [tasks, setTasks] = useState([])
+  const [filterButtons, setFilterButtons] = useState(filterButtonsInitialState)
   const [inputTask, setInputTask] = useState('')
   const [inputMinutes, setInputMinutes] = useState('')
   const [inputSeconds, setInputSeconds] = useState('')
@@ -118,6 +75,7 @@ const App = () => {
   const addItem = (text, minutes, seconds) => {
     const newTask = {
       id: userMaxId++,
+      previousClassName: null,
       className: taskStatusClassName.ACTIVE,
       description: text,
       created: new Date(),
@@ -156,15 +114,16 @@ const App = () => {
   }
   const onFilterButtonClick = (evt) => {
     const targetButtonName = evt.target.dataset.buttonName
-    const newFilteredButtons = filterButtons.map((button) => {
-      if (targetButtonName === button.buttonText) {
-        button.className = filterButtonClassName.SELECTED
-        return button
+    const updatedFilterButtons = { ...filterButtons }
+    Object.keys(updatedFilterButtons).map((button) => {
+      if (targetButtonName === button) {
+        updatedFilterButtons[button] = filterButtonClassName.SELECTED
+        return updatedFilterButtons[button]
       }
-      button.className = filterButtonClassName.NOT_SELECTED
-      return button
+      updatedFilterButtons[button] = filterButtonClassName.NOT_SELECTED
+      return updatedFilterButtons[button]
     })
-    setFilterButtons(newFilteredButtons)
+    setFilterButtons(updatedFilterButtons)
   }
   const deleteAllCompletedTasks = () => {
     const newTasks = tasks.filter((task) => task.className !== taskStatusClassName.COMPLETED)
@@ -257,4 +216,4 @@ const App = () => {
   )
 }
 export default App
-export { filterButtonName, taskStatusClassName }
+export { filterButtonName, taskStatusClassName, filterButtonClassName }

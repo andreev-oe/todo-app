@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Task } from '../Task/index.js'
-import { filterButtonName, taskStatusClassName } from '../App/App.jsx'
+import { filterButtonName, taskStatusClassName, filterButtonClassName } from '../App/App.jsx'
 
 const TaskList = ({
   onEditFieldKeyDown,
@@ -13,7 +13,11 @@ const TaskList = ({
   filterButtons,
   updateTimerTime,
 }) => {
-  const activeFilterButton = filterButtons.find((button) => button.className === 'selected').buttonText
+  const activeFilterButton = Object.keys(filterButtons).find((button) => {
+    if (filterButtons[button] === filterButtonClassName.SELECTED) {
+      return button
+    }
+  })
   const getFilteredTasks = (tasks, clickedFilterButtonName) => {
     let filteredTasks
     switch (clickedFilterButtonName) {

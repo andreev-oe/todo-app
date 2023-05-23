@@ -1,15 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { TaskFilter } from '../TaskFilter/index.js'
+import { filterButtonName } from '../App/App.jsx'
 
 const Filters = ({ filterButtons, onFilterButtonClick }) => {
   return (
     <ul className="filters">
-      {filterButtons.map((button) => {
-        const { id, ...data } = button
-        return <TaskFilter key={id} props={data} onFilterButtonClick={onFilterButtonClick} />
-      })}
+      <li>
+        <button className={filterButtons.All} data-button-name={filterButtonName.ALL} onClick={onFilterButtonClick}>
+          {filterButtonName.ALL}
+        </button>
+      </li>
+      <li>
+        <button
+          className={filterButtons.Active}
+          data-button-name={filterButtonName.ACTIVE}
+          onClick={onFilterButtonClick}
+        >
+          {filterButtonName.ACTIVE}
+        </button>
+      </li>
+      <li>
+        <button
+          className={filterButtons.Completed}
+          data-button-name={filterButtonName.COMPLETED}
+          onClick={onFilterButtonClick}
+        >
+          {filterButtonName.COMPLETED}
+        </button>
+      </li>
     </ul>
   )
 }
@@ -20,7 +39,7 @@ Filters.defaultProps = {
 }
 Filters.propTypes = {
   onFilterButtonClick: PropTypes.func,
-  filterButtons: PropTypes.arrayOf(PropTypes.object),
+  filterButtons: PropTypes.object,
 }
 
 export default Filters
